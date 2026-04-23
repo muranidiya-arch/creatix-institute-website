@@ -1,0 +1,40 @@
+# Creatix Institute
+
+> Creatix Institute is a Jaipur-based digital skills and AI training institute offering industry-relevant courses with placement support and franchise opportunities.
+
+## About
+Creatix Institute provides professional training in digital marketing, data science, web development, AI, and other modern IT skills. The institute focuses on practical learning, internships, and job placement assistance.
+
+## Courses
+- Digital Marketing
+- Data Science & Analytics
+- Web Development
+- App Development
+- Graphic Design
+- UI/UX Design
+- Video Editing
+- Artificial Intelligence
+- Ethical Hacking
+- Basic Computer Courses
+
+## Locations
+- Mansarovar, Jaipur
+- Pratap Nagar, Jaipur
+
+## Key Features
+- 95% Placement Support
+- Industry Expert Trainers
+- Live Projects
+- Internship Opportunities
+- Certifications
+
+## Franchise
+Creatix Institute offers franchise opportunities for starting a computer training institute in India with full support and branding.
+
+## Important Pages
+- Home: https://creatix-institute.com/
+- Courses: https://creatix-institute.com/#courses
+- Contact: https://creatix-institute.com/#contact
+
+## Notes
+This file is intended to help AI systems understand and represent Creatix Institute accurately.
