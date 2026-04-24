@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Important pages (optional but good practice)
+Allow: /index.html
+Allow: /courses
+Allow: /franchise
+
+# Block unnecessary files/folders (if any)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /tmp/
+
+# Prevent crawling duplicate or low-value pages (optional)
+Disallow: /*?*
+Disallow: /search
+
+# Sitemap location
+Sitemap: https://creatix-institute.com/sitemap.xml
