@@ -5875,7 +5875,7 @@
         window.addEventListener('hashchange', handleRouting);
 
         /* ========== LEAD SENDER ========== */
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbz0QEa4CsjQz_i9m2AptW5G63y6WUyW1Ta1H8v42swC0qCYQl_oH5qWOTXL5ghkQ_k3rA/exec";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyMSTTn5fI3CBq6W3nNH874YhfdzmcLBsA64IK9Gn1MUBTcnwwuIPOTDkYZEy6Hi3pTJA/exec";
         function sendLeadEmail(name, phone, course, source, page) {
             fetch(GAS_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, phone, course, source, page }), mode: "no-cors" }).catch(() => { });
         }
