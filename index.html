@@ -1642,96 +1642,219 @@
             background: var(--bg-grey)
         }
 
-        .reels-out {
+        .reviews-grid-container {
             margin-top: 40px;
-            overflow-x: auto;
-            padding-bottom: 8px
         }
 
-        .reels-out::-webkit-scrollbar {
-            height: 3px
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+            justify-items: center;
+            max-width: 1100px;
+            margin: 40px auto 0;
         }
 
-        .reels-out::-webkit-scrollbar-thumb {
-            background: var(--red)
+        @media(max-width: 1024px) {
+            .reviews-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
         }
 
-        .reels-tr {
-            display: flex;
-            gap: 14px;
-            min-width: max-content
+        @media(max-width: 600px) {
+            .reviews-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
         }
 
-        .reel {
-            width: 185px;
-            height: 310px;
-            border-radius: 14px;
-            overflow: hidden;
+        .review-video-card {
             position: relative;
-            flex-shrink: 0;
-            cursor: pointer;
-            border: 2px solid var(--border);
-            transition: all .3s;
-            background: #fff
-        }
-
-        .reel:hover {
-            border-color: var(--red);
-            box-shadow: var(--shadow-hover);
-            transform: scale(1.04)
-        }
-
-        .reel-in {
             width: 100%;
-            height: 100%;
+            max-width: 160px;
+            aspect-ratio: 9/16;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 2px solid var(--border);
+            background: #1A1A2E;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 18px
+            justify-content: flex-end;
+            box-shadow: var(--shadow);
         }
 
-        .r-play {
-            width: 50px;
-            height: 50px;
+        .review-video-card:hover {
+            border-color: var(--red);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .review-video-card .card-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 12px;
+            background-size: cover;
+            background-position: center;
+            transition: all 0.3s ease;
+        }
+
+        .review-video-card .card-poster::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(21, 16, 48, 0.1) 0%, rgba(7, 11, 25, 0.85) 100%);
+            z-index: 1;
+            transition: background 0.3s ease;
+        }
+
+        .review-video-card:hover .card-poster::before {
+            background: linear-gradient(to bottom, rgba(21, 16, 48, 0.0) 0%, rgba(7, 11, 25, 0.95) 100%);
+        }
+
+        .review-video-card .card-poster>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        .review-video-card .play-btn-wrap {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
+            background: var(--red);
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 15px rgba(232, 35, 42, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .review-video-card:hover .play-btn-wrap {
+            background: #fff;
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .review-video-card .play-btn-wrap i {
             color: #fff;
-            font-size: 17px;
-            transition: transform .3s;
-            flex-shrink: 0
+            font-size: 18px;
+            margin-left: 3px;
+            transition: color 0.3s ease;
         }
 
-        .reel:hover .r-play {
-            transform: scale(1.18)
+        .review-video-card:hover .play-btn-wrap i {
+            color: var(--red);
         }
 
-        .r-title {
-            font-size: .78rem;
+        .review-video-card .student-meta {
+            margin-top: auto;
+            color: #fff;
+        }
+
+        .review-video-card .student-name {
+            font-size: 0.85rem;
             font-weight: 700;
-            color: var(--text);
-            text-align: center;
-            line-height: 1.4
+            margin-bottom: 4px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .r-sub {
-            font-size: .7rem;
-            color: var(--text-muted);
-            text-align: center
+        .review-video-card .student-course {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 3px 8px;
+            border-radius: 20px;
+            display: inline-block;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .r-badge {
+        /* Video Lightbox Modal styling */
+        .video-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-modal.open {
+            opacity: 1;
+        }
+
+        .video-modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 420px;
+            height: 80vh;
+            max-height: 720px;
+            background: #000;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .video-modal.open .video-modal-content {
+            transform: scale(1);
+        }
+
+        .video-modal-close {
             position: absolute;
-            top: 9px;
-            left: 9px;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
             color: #fff;
-            font-size: .63rem;
-            font-weight: 700;
-            padding: 3px 9px;
-            border-radius: 4px
+            font-size: 28px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .video-modal-close:hover {
+            background: var(--red);
+            color: #fff;
+        }
+
+        .video-modal-body {
+            width: 100%;
+            height: 100%;
+            background: #000;
         }
 
         /* TESTIMONIALS */
@@ -3914,8 +4037,8 @@
         gtag('config', 'AW-17490688136');
     </script>
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WK8RN3HP"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WK8RN3HP" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage">
@@ -4232,17 +4355,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="details-grid" id="detailsGrid"></div>
         </section>
 
-        <!-- ===================== STUDENT WORK ===================== -->
+        <!-- ===================== OUR REVIEWS ===================== -->
         <section id="student-work" aria-labelledby="student-work-heading">
             <div class="sec-head fu">
-                <div class="sec-tag"><i class="fa-solid fa-film" aria-hidden="true"></i>Student Portfolio</div>
-                <h2 class="sec-h2" id="student-work-heading">Our Students' <span>Amazing Work</span></h2>
+                <div class="sec-tag"><i class="fa-solid fa-star" aria-hidden="true"></i>Our Reviews</div>
+                <h2 class="sec-h2" id="student-work-heading">Our <span>Reviews</span></h2>
                 <div class="divider" aria-hidden="true"></div>
-                <p class="sec-sub" style="margin-top:10px">Real projects built by Creatix students — motion graphics,
-                    brand designs, campaigns &amp; more from Jaipur's best digital institute</p>
+                <p class="sec-sub" style="margin-top:10px">Watch real video reviews and success stories from our
+                    students who built successful careers at Creatix Institute Jaipur.</p>
             </div>
-            <div class="reels-out fu" style="transition-delay:.15s">
-                <div class="reels-tr" id="reelsTrack" role="list" aria-label="Student project portfolio"></div>
+            <div class="reviews-grid-container fu" style="transition-delay:.15s">
+                <div class="reviews-grid" id="reviewsGrid" role="list" aria-label="Student video reviews"></div>
             </div>
         </section>
 
@@ -4414,14 +4537,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <h3 itemprop="name" style="font-size:.88rem;font-weight:700;color:var(--text);margin:0">
                                 Mansarovar Branch</h3>
                             <p itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-                                <span itemprop="streetAddress" style="font-size:.78rem;opacity:.9">Near St. Wilfred's college, 120/27 1, Sector 12, Mansarovar</span>,<br>
-                                <span itemprop="addressLocality">Jaipur</span>, <span itemprop="addressRegion">Rajasthan</span> <span itemprop="postalCode">302020</span>
+                                <span itemprop="streetAddress" style="font-size:.78rem;opacity:.9">Near St. Wilfred's
+                                    college, 120/27 1, Sector 12, Mansarovar</span>,<br>
+                                <span itemprop="addressLocality">Jaipur</span>, <span
+                                    itemprop="addressRegion">Rajasthan</span> <span itemprop="postalCode">302020</span>
                             </p>
                         </div>
                     </div>
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3559.8173834987097!2d75.7626651087654!3d26.845760062871513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db5f3b26178bb%3A0x9f62946b22899534!2sCreatix%20Institute!5e0!3m2!1sen!2sin!4v1779010934669!5m2!1sen!2sin"
-                        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Creatix Institute Mansarovar Branch Location Jaipur"
+                        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        title="Creatix Institute Mansarovar Branch Location Jaipur"
                         aria-label="Map showing Creatix Institute Mansarovar branch in Jaipur"></iframe>
                 </div>
                 <div class="map-box" itemscope itemtype="https://schema.org/Place">
@@ -4431,14 +4557,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <h3 itemprop="name" style="font-size:.88rem;font-weight:700;color:var(--text);margin:0">
                                 Pratap Nagar Branch</h3>
                             <p itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-                                <span itemprop="streetAddress" style="font-size:.78rem;opacity:.9">3rd Floor, Plot No. 100/SP/04, Sector-10, Tonk Rd, Pratap Nagar, Sector 8, Sitapura Industrial Area, Sanganer</span>,<br>
-                                <span itemprop="addressLocality">Jaipur</span>, <span itemprop="addressRegion">Rajasthan</span> <span itemprop="postalCode">302033</span>
+                                <span itemprop="streetAddress" style="font-size:.78rem;opacity:.9">3rd Floor, Plot No.
+                                    100/SP/04, Sector-10, Tonk Rd, Pratap Nagar, Sector 8, Sitapura Industrial Area,
+                                    Sanganer</span>,<br>
+                                <span itemprop="addressLocality">Jaipur</span>, <span
+                                    itemprop="addressRegion">Rajasthan</span> <span itemprop="postalCode">302033</span>
                             </p>
                         </div>
                     </div>
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113914.02146876194!2d75.68265922650764!3d26.84589402256447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396dc9f1e2b70009%3A0xadd0b17e1357f0a!2sCreatix%20Institute%20%7C%20Graphic%20Design%7C%20Data%20Science%7CAI%20%7CEthical%20Hacking%7CPhotography%20%7C%20UI%2FUX%7CAnimation-VFX!5e0!3m2!1sen!2sin!4v1779010972113!5m2!1sen!2sin"
-                        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Creatix Institute Pratap Nagar Branch Location Jaipur"
+                        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        title="Creatix Institute Pratap Nagar Branch Location Jaipur"
                         aria-label="Map showing Creatix Institute Pratap Nagar branch in Jaipur"></iframe>
                 </div>
             </div>
@@ -4557,9 +4687,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <p><i class="fa-solid fa-envelope" aria-hidden="true"></i><a href="mailto:creatixjpr@gmail.com"
                                 itemprop="email" style="color:inherit"
                                 aria-label="Email Creatix">creatixjpr@gmail.com</a></p>
-                        <p style="display:flex;align-items:flex-start;gap:8px"><i class="fa-solid fa-location-dot" aria-hidden="true" style="margin-top:4px"></i><span
-                                itemprop="address">Near St. Wilfred's college, 120/27 1, Sector 12, Mansarovar, Jaipur – 302020</span></p>
-                        <p style="display:flex;align-items:flex-start;gap:8px"><i class="fa-solid fa-location-dot" aria-hidden="true" style="margin-top:4px"></i><span>3rd Floor, Plot No. 100/SP/04, Sector-10, Tonk Rd, Pratap Nagar, Sector 8, Sitapura Industrial Area, Sanganer, Jaipur – 302033</span></p>
+                        <p style="display:flex;align-items:flex-start;gap:8px"><i class="fa-solid fa-location-dot"
+                                aria-hidden="true" style="margin-top:4px"></i><span itemprop="address">Near St.
+                                Wilfred's college, 120/27 1, Sector 12, Mansarovar, Jaipur – 302020</span></p>
+                        <p style="display:flex;align-items:flex-start;gap:8px"><i class="fa-solid fa-location-dot"
+                                aria-hidden="true" style="margin-top:4px"></i><span>3rd Floor, Plot No. 100/SP/04,
+                                Sector-10, Tonk Rd, Pratap Nagar, Sector 8, Sitapura Industrial Area, Sanganer, Jaipur –
+                                302033</span></p>
                         <p><i class="fa-solid fa-clock" aria-hidden="true"></i>Mon–Sat: 9 AM – 7 PM</p>
                     </address>
                 </div>
@@ -5656,14 +5790,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             { i: "fa-solid fa-people-group", t: "Supportive Community", d: "Join 2500+ Creatix learners and alumni cheering you on in Jaipur", c: "#881337", bg: "#FFF1F2" },
         ];
 
+        // Student review video data (Google Drive sharing links)
+        // Edit the 'v' property of each object to replace placeholders with your actual Google Drive video links.
         const REELS = [
-            { t: "Motion Graphics Reel", s: "B.Voc Student", c: "#7C3AED" }, { t: "Brand Identity Design", s: "Graphic Design", c: "#C2410C" },
-            { t: "Social Media Campaign", s: "Digital Marketing", c: "#D97706" }, { t: "YouTube Intro Video", s: "Video Editing", c: "#DC2626" },
-            { t: "Product Photography", s: "Photography", c: "#881337" }, { t: "Website Landing Page", s: "Web Development", c: "#065F46" },
-            { t: "Data Dashboard", s: "Data Science", c: "#0369A1" }, { t: "Mobile App Prototype", s: "UI-UX Design", c: "#9D174D" },
-            { t: "Digital Ad Campaign", s: "Digital Marketing", c: "#B45309" }, { t: "E-commerce Store", s: "Web Development", c: "#3730A3" },
-            { t: "Logo Animation", s: "Graphic Design", c: "#C2410C" }, { t: "Infographic Series", s: "B.Voc Student", c: "#7C3AED" },
-            { t: "AI Art Portfolio", s: "Generative AI", c: "#14532D" }, { t: "Video Resume", s: "Video Editing", c: "#DC2626" },
+            { n: "Rhytham sharma", c: "Digital Marketing with AI", v: "https://drive.google.com/file/d/1HJDmd6pFvYbPw_HNmyWOdRCZd_UGJESv/view?usp=drive_link" },
+            { n: "Ayush", c: "Video Editing & Motion Graphics", v: "https://drive.google.com/file/d/1sAYMBjiKnZu5XHm1vJlCCCJ0Wu91q9-d/view?usp=drive_link" },
+            { n: "Ravi", c: "Digital marketing", v: "https://drive.google.com/file/d/1azNkX1JnfoLpH6w3pvBy-lR0bR7Vbl-P/view?usp=drive_link" },
+            { n: "Salman", c: "Digital marketing", v: "https://drive.google.com/file/d/1OMgh3AveO_o0HvOG5je9J_7R1-pbwAKE/view?usp=drive_link" },
+            { n: "Sachin", c: "Graphic Design with AI", v: "https://drive.google.com/file/d/16ufAqrkGlEDEdiXHKQRbaqH6dcAVYZxX/view?usp=drive_link" },
+            { n: "Lucky", c: "Digital marketing", v: "https://drive.google.com/file/d/1BuHahU6Kir03Bj35AzvK4aOkVN8_HmlB/view?usp=drive_link" }
         ];
 
         /* ========== RENDER ========== */
@@ -5697,14 +5832,71 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         function toggleDC(hd) { const card = hd.closest('.dc'), open = card.classList.contains('open'); document.querySelectorAll('.dc.open').forEach(c => c.classList.remove('open')); if (!open) card.classList.add('open'); }
 
         function rReels() {
-            document.getElementById('reelsTrack').innerHTML = REELS.map(r => `
-    <div class="reel" onclick="scrollToForm()" role="listitem" tabindex="0" aria-label="${r.t} by Creatix ${r.s} student">
-      <div class="reel-in" style="background:${r.c}0C">
-        <div class="r-play" style="background:${r.c}" aria-hidden="true"><i class="fa-solid fa-play"></i></div>
-        <div class="r-title">${r.t}</div><div class="r-sub">${r.s}</div>
+            document.getElementById('reviewsGrid').innerHTML = REELS.map(r => {
+                const driveId = getGoogleDriveId(r.v);
+                const thumbUrl = driveId ? `https://drive.google.com/thumbnail?id=${driveId}&sz=w400` : '';
+                return `
+    <article class="review-video-card" onclick="playVideoReview(this, '${r.v}')" role="listitem" tabindex="0" aria-label="Video review by ${r.n}">
+      <div class="card-poster" ${thumbUrl ? `style="background-image: url('${thumbUrl}')"` : ''}>
+        <div class="play-btn-wrap" aria-hidden="true">
+          <i class="fa-solid fa-play"></i>
+        </div>
+        <div class="student-meta">
+          <div class="student-name">${r.n}</div>
+          <span class="student-course">${r.c}</span>
+        </div>
       </div>
-      <span class="r-badge" style="background:${r.c}">Student Work</span>
-    </div>`).join('');
+    </article>`;
+            }).join('');
+        }
+
+        function getGoogleDriveId(url) {
+            if (!url) return null;
+            const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+            return match ? match[1] : null;
+        }
+
+        function playVideoReview(card, videoUrl) {
+            const driveId = getGoogleDriveId(videoUrl);
+            const modal = document.getElementById('videoModal');
+            const body = document.getElementById('videoModalBody');
+            if (!modal || !body) return;
+
+            let playerHtml = '';
+            if (driveId) {
+                // Open the Google Drive preview player safely inside the lightbox modal structure
+                playerHtml = `
+                    <iframe 
+                        src="https://drive.google.com/file/d/${driveId}/preview?autoplay=1" 
+                        style="width: 100%; height: 100%; border: none;" 
+                        allow="autoplay; encrypted-media; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>`;
+            } else {
+                playerHtml = `
+                    <video 
+                        src="${videoUrl}" 
+                        controls 
+                        autoplay 
+                        playsinline 
+                        style="width: 100%; height: 100%; object-fit: contain; background: #000;">
+                    </video>`;
+            }
+
+            body.innerHTML = playerHtml;
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('open'), 10);
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const body = document.getElementById('videoModalBody');
+            if (!modal || !body) return;
+            modal.classList.remove('open');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                body.innerHTML = '';
+            }, 300);
         }
 
         function rTesti() {
@@ -5969,14 +6161,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }, 100);
         setTimeout(observe, 600);
     </script>
+
+    <!-- Video Lightbox Modal -->
+    <div id="videoModal" class="video-modal" onclick="closeVideoModal()" role="dialog" aria-modal="true" aria-label="Student video review player">
+        <div class="video-modal-content" onclick="event.stopPropagation()">
+            <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Close player">&times;</button>
+            <div id="videoModalBody" class="video-modal-body"></div>
+        </div>
+    </div>
+
     <!-- Google Tag Manager -->
-<script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-WK8RN3HP');
-</script>
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-WK8RN3HP');
+    </script>
 </body>
 
 </html>
