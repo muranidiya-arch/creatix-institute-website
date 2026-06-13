@@ -603,6 +603,8 @@
             left: 50%;
             transform: translateX(-50%);
             width: min(820px, 94vw);
+            max-height: 85vh;
+            overflow-y: auto;
             background: #fff;
             border-radius: 0 0 16px 16px;
             border: 0.5px solid var(--border);
@@ -622,7 +624,8 @@
             justify-content: space-between;
             margin-bottom: 16px;
             padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-light)
+            border-bottom: 1px solid var(--border-light);
+            gap: 12px
         }
 
         .mega-hd-lbl {
@@ -631,6 +634,35 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-muted)
+        }
+
+        .mega-quick-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .mega-q-link {
+            color: var(--red);
+            font-weight: 600;
+            font-size: .7rem;
+            cursor: pointer;
+            background: #FFF1F2;
+            padding: 4px 10px;
+            border-radius: 50px;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid rgba(232, 35, 42, 0.08);
+        }
+
+        .mega-q-link:hover {
+            background: var(--red);
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(232, 35, 42, 0.15)
         }
 
         .mega-hd-cta {
@@ -645,7 +677,7 @@
 
         .mega-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px
         }
 
@@ -5723,6 +5755,33 @@
 
     </div>
 
+    <!-- ==================== THANK YOU PAGE ==================== -->
+    <div id="thankYouPage" role="main" aria-label="Thank you for your enquiry" style="display: none;">
+        <div class="ty-card fu vis">
+            <div class="ty-icon" aria-hidden="true">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h1>Enquiry Received Successfully!</h1>
+            <p>Thank you for connecting with <strong>Creatix Institute Jaipur</strong>. Your query has been logged in our system. You are being redirected to chat with our expert on WhatsApp to get instant details.</p>
+            
+            <div class="ty-redirect-box">
+                <div style="font-size: .84rem; font-weight: 700; color: rgba(255,255,255,0.9)">Redirecting to WhatsApp in <span id="tyCountdown">5</span> seconds...</div>
+                <div class="ty-progress-bar">
+                    <div id="tyProgressFill" class="ty-progress-fill"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
+                <a id="tyWaBtn" href="#" target="_blank" class="btn-ty-wa">
+                    <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp Now
+                </a>
+                <a href="#" onclick="showMain()" class="btn-ty-home">
+                    <i class="fa-solid fa-house"></i> Back to Homepage
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== FLOATING ELEMENTS ==================== -->
     <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top"><i
             class="fa-solid fa-arrow-up" aria-hidden="true"></i></button>
@@ -5735,24 +5794,358 @@
     <script>
         /* ===================== DATA ===================== */
         const COURSES = [
-            { n: "B.Voc", i: "fa-solid fa-university", c: "#7C3AED", bg: "#F5F0FF", tag: "Degree", tc: "#7C3AED", tb: "#EDE9FE" },
-            { n: "Video Editing", i: "fa-solid fa-film", c: "#DC2626", bg: "#FFF0F0", tag: "Creative", tc: "#DC2626", tb: "#FEE2E2" },
-            { n: "Digital Marketing with AI", i: "fa-solid fa-bullhorn", c: "#B45309", bg: "#FFFBEB", tag: "🔥 Trending", tc: "#B45309", tb: "#FEF3C7" },
-            { n: "Data Science with AI", i: "fa-solid fa-database", c: "#0369A1", bg: "#EFF6FF", tag: "High Salary", tc: "#0369A1", tb: "#DBEAFE" },
-            { n: "Generative AI", i: "fa-solid fa-robot", c: "#7C3AED", bg: "#F5F0FF", tag: "🔥 Hot", tc: "#7C3AED", tb: "#EDE9FE" },
-            { n: "Graphic Design with AI", i: "fa-solid fa-pen-nib", c: "#C2410C", bg: "#FFF7ED", tag: "Creative", tc: "#C2410C", tb: "#FFEDD5" },
-            { n: "UI-UX Design", i: "fa-solid fa-layer-group", c: "#9D174D", bg: "#FDF2F8", tag: "In Demand", tc: "#9D174D", tb: "#FCE7F3" },
-            { n: "Web Development", i: "fa-solid fa-code", c: "#065F46", bg: "#ECFDF5", tag: "In Demand", tc: "#065F46", tb: "#D1FAE5" },
-            { n: "Ethical Hacking", i: "fa-solid fa-shield-halved", c: "#14532D", bg: "#F0FDF4", tag: "Expert", tc: "#14532D", tb: "#DCFCE7" },
-            { n: "Programming", i: "fa-solid fa-terminal", c: "#3730A3", bg: "#EEF2FF", tag: "Foundation", tc: "#3730A3", tb: "#E0E7FF" },
-            { n: "Spoken English", i: "fa-solid fa-microphone", c: "#0369A1", bg: "#F0F9FF", tag: "Soft Skill", tc: "#0369A1", tb: "#E0F2FE" },
-            { n: "Tally", i: "fa-solid fa-calculator", c: "#365314", bg: "#F7FEE7", tag: "Finance", tc: "#365314", tb: "#ECFCCB" },
-            { n: "Photography", i: "fa-solid fa-camera", c: "#881337", bg: "#FFF1F2", tag: "Creative", tc: "#881337", tb: "#FFE4E6" },
+            { n: "B.Voc", i: "fa-solid fa-university", c: "#7C3AED", bg: "#F5F0FF", tag: "3 Years Degree", tc: "#7C3AED", tb: "#EDE9FE", cat: "careers" },
+            { n: "Audio-Video Editing (3 Months)", i: "fa-solid fa-scissors", c: "#DC2626", bg: "#FFF0F0", tag: "3 Months", tc: "#DC2626", tb: "#FEE2E2", cat: "video-vfx" },
+            { n: "Audio-Video Editing (6 Months)", i: "fa-solid fa-film", c: "#2563EB", bg: "#EFF6FF", tag: "6 Months", tc: "#2563EB", tb: "#DBEAFE", cat: "video-vfx" },
+            { n: "Advanced Diploma in Motion Graphics", i: "fa-solid fa-cube", c: "#059669", bg: "#ECFDF5", tag: "12 Months Diploma", tc: "#059669", tb: "#D1FAE5", cat: "video-vfx" },
+            { n: "AI Tools Certification", i: "fa-solid fa-wand-magic-sparkles", c: "#D97706", bg: "#FFFBEB", tag: "3 Months", tc: "#D97706", tb: "#FEF3C7", cat: "ai-data" },
+            { n: "2D-3D Animation", i: "fa-solid fa-dragon", c: "#7C3AED", bg: "#F5F0FF", tag: "12 Months", tc: "#7C3AED", tb: "#EDE9FE", cat: "video-vfx" },
+            { n: "VFX Course", i: "fa-solid fa-mask", c: "#9D174D", bg: "#FDF2F8", tag: "12 Months", tc: "#9D174D", tb: "#FCE7F3", cat: "video-vfx" },
+            { n: "Data Analytics", i: "fa-solid fa-chart-pie", c: "#0369A1", bg: "#EFF6FF", tag: "6 Months", tc: "#0369A1", tb: "#DBEAFE", cat: "ai-data" },
+            { n: "Diploma in Interior & Architecture", i: "fa-solid fa-compass-drafting", c: "#365314", bg: "#F7FEE7", tag: "12 Months", tc: "#365314", tb: "#ECFCCB", cat: "design-marketing" },
+            { n: "Salesforce (Admin & Development)", i: "fa-solid fa-cloud-bolt", c: "#0284C7", bg: "#F0F9FF", tag: "12 Months", tc: "#0284C7", tb: "#E0F2FE", cat: "programming" },
+            { n: "Instagram/YouTube Content Creation", i: "fa-solid fa-share-nodes", c: "#EA580C", bg: "#FFF7ED", tag: "2 Months", tc: "#EA580C", tb: "#FFEDD5", cat: "design-marketing" },
+            { n: "C/C++ Language", i: "fa-solid fa-terminal", c: "#4F46E5", bg: "#EEF2FF", tag: "3 Months", tc: "#4F46E5", tb: "#E0E7FF", cat: "programming" },
+            { n: "Artificial Intelligence Specialist", i: "fa-solid fa-brain", c: "#7C3AED", bg: "#F5F0FF", tag: "6 Months", tc: "#7C3AED", tb: "#EDE9FE", cat: "ai-data" },
+            { n: "Cloud Computing", i: "fa-solid fa-server", c: "#0891B2", bg: "#ECFEFF", tag: "6 Months", tc: "#0891B2", tb: "#CFFAFE", cat: "ai-data" },
+            { n: "Digital Marketing with AI", i: "fa-solid fa-bullhorn", c: "#B45309", bg: "#FFFBEB", tag: "🔥 Trending", tc: "#B45309", tb: "#FEF3C7", cat: "design-marketing" },
+            { n: "Data Science with AI", i: "fa-solid fa-database", c: "#0369A1", bg: "#EFF6FF", tag: "High Salary", tc: "#0369A1", tb: "#DBEAFE", cat: "ai-data" },
+            { n: "Generative AI", i: "fa-solid fa-robot", c: "#7C3AED", bg: "#F5F0FF", tag: "🔥 Hot", tc: "#7C3AED", tb: "#EDE9FE", cat: "ai-data" },
+            { n: "Graphic Design with AI", i: "fa-solid fa-pen-nib", c: "#C2410C", bg: "#FFF7ED", tag: "Creative", tc: "#C2410C", tb: "#FFEDD5", cat: "design-marketing" },
+            { n: "UI-UX Design", i: "fa-solid fa-layer-group", c: "#9D174D", bg: "#FDF2F8", tag: "In Demand", tc: "#9D174D", tb: "#FCE7F3", cat: "design-marketing" },
+            { n: "Web Development", i: "fa-solid fa-code", c: "#065F46", bg: "#ECFDF5", tag: "In Demand", tc: "#065F46", tb: "#D1FAE5", cat: "programming" },
+            { n: "Ethical Hacking", i: "fa-solid fa-shield-halved", c: "#14532D", bg: "#F0FDF4", tag: "Expert", tc: "#14532D", tb: "#DCFCE7", cat: "programming" },
+            { n: "Programming", i: "fa-solid fa-terminal", c: "#3730A3", bg: "#EEF2FF", tag: "Foundation", tc: "#3730A3", tb: "#E0E7FF", cat: "programming" },
+            { n: "Spoken English", i: "fa-solid fa-microphone", c: "#0369A1", bg: "#F0F9FF", tag: "Soft Skill", tc: "#0369A1", tb: "#E0F2FE", cat: "careers" },
+            { n: "Tally", i: "fa-solid fa-calculator", c: "#365314", bg: "#F7FEE7", tag: "Finance", tc: "#365314", tb: "#ECFCCB", cat: "careers" },
+            { n: "Photography", i: "fa-solid fa-camera", c: "#881337", bg: "#FFF1F2", tag: "Creative", tc: "#881337", tb: "#FFE4E6", cat: "video-vfx" }
         ];
 
         const COURSE_DETAILS = {
-            "B.Voc": { desc: "A 2-year UGC-recognized vocational degree program in Jaipur integrating digital skills — graphic design, video editing, web development, and digital marketing — with academic qualifications.", duration: "2 Years", level: "Beginner to Advanced", batch: "Morning / Evening / Weekend", cert: "UGC-Recognized B.Voc Degree", highlights: [{ i: "fa-solid fa-university", c: "#7C3AED", bg: "#F5F0FF", t: "UGC-Recognized Degree", d: "Nationally recognized B.Voc qualification" }, { i: "fa-solid fa-laptop-code", c: "#0369A1", bg: "#EFF6FF", t: "6 Skill Modules", d: "Design, Video, Web Dev, Marketing & more" }, { i: "fa-solid fa-briefcase", c: "#065F46", bg: "#ECFDF5", t: "Guaranteed Internship", d: "6-month live internship with real clients" }, { i: "fa-solid fa-certificate", c: "#B45309", bg: "#FFFBEB", t: "Industry Certification", d: "Adobe, Google & Meta certifications included" }], curriculum: [{ m: "Semester 1 – Foundation", topics: ["Introduction to Digital Design", "Fundamentals of Photography", "Basic Video Production", "Computer & Internet Basics", "Communication Skills"] }, { m: "Semester 2 – Graphic Design", topics: ["Adobe Photoshop Advanced", "Adobe Illustrator", "Brand Identity Design", "Print & Packaging Design", "AI Design Tools (Midjourney, Adobe Firefly)"] }, { m: "Semester 3 – Video & Motion", topics: ["Adobe Premiere Pro", "After Effects & Motion Graphics", "Color Grading & Sound", "Reel & YouTube Content Creation", "AI Video Tools (RunwayML, Sora)"] }, { m: "Semester 4 – Web & Marketing", topics: ["HTML, CSS & JavaScript", "WordPress & Shopify", "SEO & Google Ads", "Social Media Marketing", "ChatGPT & AI Marketing Tools"] }], tools: ["Adobe Photoshop", "Adobe Illustrator", "Premiere Pro", "After Effects", "Figma", "WordPress", "Canva Pro", "Midjourney", "ChatGPT", "Google Ads", "Meta Ads", "Capcut"], outcomes: ["Graphic Designer", "Video Editor", "Web Developer", "Digital Marketer", "Content Creator", "UI/UX Designer", "Social Media Manager", "Freelancer"], features: ["UGC-Recognized B.Voc Degree", "Placement support with 200+ companies", "Live projects & real client work", "Adobe, Google & Meta certifications", "Expert trainers with 5+ years experience", "Flexible morning/evening batches", "Dedicated career counseling", "Alumni network of 2500+ professionals"], testi: { t: "The B.Voc program completely changed my career trajectory. I got placed as a Content Creator at a digital agency right after graduation!", n: "Riya Sharma", r: "Content Creator · Digital Agency", av: "RS", c: "#7C3AED" } },
-            "Video Editing": { desc: "Master professional video editing & motion graphics for YouTube, films, reels, ads, and corporate content using Adobe Premiere Pro, After Effects and AI-powered workflows. Best video editing course in Jaipur.", duration: "3 Months", level: "Beginner to Advanced", batch: "Morning / Evening / Weekend", cert: "Creatix + Adobe Certificate", highlights: [{ i: "fa-solid fa-film", c: "#DC2626", bg: "#FFF0F0", t: "Adobe Premiere Pro", d: "Industry-standard editing software mastery" }, { i: "fa-solid fa-magic", c: "#7C3AED", bg: "#F5F0FF", t: "AI-Powered Editing", d: "RunwayML, CapCut AI & Sora workflow" }, { i: "fa-solid fa-video", c: "#0369A1", bg: "#EFF6FF", t: "20+ Live Projects", d: "Real client briefs from YouTube channels" }, { i: "fa-solid fa-chart-line", c: "#065F46", bg: "#ECFDF5", t: "Freelance Blueprint", d: "Earn ₹30k-₹1L+ per month from home" }], curriculum: [{ m: "Module 1 – Editing Basics", topics: ["Interface & Timeline mastery", "Cuts, Transitions & Effects", "Audio Mixing & Sync", "Color Correction basics", "Exporting for YouTube/Instagram"] }, { m: "Module 2 – Advanced Editing", topics: ["Advanced Color Grading (LUTs)", "Motion Graphics & Text Animation", "Speed Ramping & Cinematic Effects", "Green Screen / Chroma Key", "Multi-cam Editing Workflow"] }, { m: "Module 3 – Reels & Short Form", topics: ["Instagram Reels & TikTok editing", "Trending Reels formats", "Music sync & Beat matching", "Caption & subtitle workflows", "Viral content structure"] }, { m: "Module 4 – AI & Freelancing", topics: ["RunwayML & AI video generation", "CapCut AI & Descript", "ElevenLabs AI voiceover", "Fiverr & Upwork profile setup", "Client management & invoicing"] }], tools: ["Adobe Premiere Pro", "After Effects", "DaVinci Resolve", "CapCut", "RunwayML", "Descript", "ElevenLabs", "Audition", "VN Editor", "Canva", "Sora AI", "Topaz Video AI"], outcomes: ["YouTube Video Editor", "Reel Creator", "Film Editor", "Motion Graphics Artist", "Ad Film Editor", "Content Creator", "Freelance Editor", "Social Media Producer"], features: ["Adobe Premiere Pro & After Effects", "Hands-on with 20+ real projects", "Portfolio-ready reel on graduation", "Freelancing income strategies", "Placement support", "AI video tools training", "Live feedback sessions", "WhatsApp support group"], testi: { t: "I was a complete beginner. After this course I earn ₹40k/month freelancing from home.", n: "Rahul Agarwal", r: "Freelance Video Editor", av: "RA", c: "#DC2626" } },
+            "B.Voc": { 
+                desc: "A 3-year UGC-approved vocational degree program in Jaipur integrating digital skills — graphic design, video editing, web development, and digital marketing — with academic qualifications.", 
+                duration: "3 Years", 
+                level: "12th Pass (Any Stream)", 
+                batch: "Morning / Evening", 
+                cert: "UGC-Approved B.Voc Degree", 
+                highlights: [
+                    { i: "fa-solid fa-university", c: "#7C3AED", bg: "#F5F0FF", t: "UGC-Approved Degree", d: "Nationally recognized B.Voc qualification" }, 
+                    { i: "fa-solid fa-laptop-code", c: "#0369A1", bg: "#EFF6FF", t: "6 Skill Modules", d: "Design, Video, Web Dev, Marketing & more" }, 
+                    { i: "fa-solid fa-briefcase", c: "#065F46", bg: "#ECFDF5", t: "Guaranteed Internship", d: "6-month live internship with real clients" }, 
+                    { i: "fa-solid fa-certificate", c: "#B45309", bg: "#FFFBEB", t: "Industry Certification", d: "Adobe, Google & Meta certifications included" }
+                ], 
+                curriculum: [
+                    { m: "Semester 1 – Design & Creative Foundations", topics: ["Introduction to Digital Art", "Fundamentals of Photography", "Drawing & Composition", "Computer & Internet Basics", "Communication Skills"] }, 
+                    { m: "Semester 2 – Graphic & UI Design", topics: ["Adobe Photoshop Advanced", "Adobe Illustrator", "Brand Identity & Logo Design", "Print & Packaging Design", "AI Design Tools (Midjourney, Firefly)"] }, 
+                    { m: "Semester 3 – Audio-Video Production", topics: ["Adobe Premiere Pro Essentials", "Audio Editing & Noise Removal", "Color Grading & Sound Synch", "Reel & YouTube Video Editing", "AI Video tools"] }, 
+                    { m: "Semester 4 – Motion Graphics & 3D Basics", topics: ["Adobe After Effects", "Motion Graphics & Kinetic Typography", "Cinema 4D basics", "Character Animation", "VFX Basics"] }, 
+                    { m: "Semester 5 – Web Development & Coding", topics: ["HTML5, CSS3 & JavaScript", "WordPress & Shopify development", "Git & GitHub", "API Integration", "AI-assisted coding"] }, 
+                    { m: "Semester 6 – Digital Marketing & AI Applications", topics: ["Search Engine Optimization (SEO)", "Google Ads & Meta Ads", "Social Media Marketing", "ChatGPT & AI Marketing Tools", "Final Graduation Project"] }
+                ], 
+                tools: ["Adobe Photoshop", "Adobe Illustrator", "Premiere Pro", "After Effects", "Figma", "WordPress", "Canva Pro", "Midjourney", "ChatGPT", "Google Ads", "Meta Ads", "Capcut"], 
+                outcomes: ["Graphic Designer", "Video Editor", "Web Developer", "Digital Marketer", "Content Creator", "UI/UX Designer", "Social Media Manager", "Freelancer"], 
+                features: ["UGC-Approved B.Voc Degree", "Placement support with 200+ companies", "Live projects & real client work", "Adobe, Google & Meta certifications", "Expert trainers with 5+ years experience", "Flexible morning/evening batches", "Dedicated career counseling", "Alumni network of 2500+ professionals"], 
+                testi: { t: "The B.Voc program completely changed my career trajectory. I got placed as a Content Creator at a digital agency right after graduation!", n: "Riya Sharma", r: "Content Creator · Digital Agency", av: "RS", c: "#7C3AED" } 
+            },
+            "Audio-Video Editing (3 Months)": {
+                desc: "Learn professional video & audio editing for YouTube, Reels, and corporate videos. Master Adobe Premiere Pro, Audition, and CapCut AI. Best short-term video editing course in Jaipur.",
+                duration: "3 Months",
+                level: "Beginner to Intermediate",
+                batch: "Morning / Evening / Weekend",
+                cert: "Creatix Video Editing Certificate",
+                highlights: [
+                    { i: "fa-solid fa-scissors", c: "#DC2626", bg: "#FFF0F0", t: "Timeline Editing", d: "Master cuts, transition and music synch" },
+                    { i: "fa-solid fa-volume-high", c: "#0369A1", bg: "#EFF6FF", t: "Audio Editing", d: "Noise removal, sound effects, BGM sync" },
+                    { i: "fa-solid fa-bolt", c: "#7C3AED", bg: "#F5F0FF", t: "AI Tools Integration", d: "Speech-to-text, auto-captions, AI effects" },
+                    { i: "fa-solid fa-video", c: "#065F46", bg: "#ECFDF5", t: "Social Media Formats", d: "Reels, Shorts, YouTube & ads structures" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Video Editing Foundations", topics: ["Premiere Pro interface & import", "Timeline navigation & cuts", "Transitions & video effects", "Working with text & titles"] },
+                    { m: "Module 2 – Audio Editing & Mastering", topics: ["Adobe Audition basics", "Noise removal & voice clear", "Sound effects & background music", "Audio levels & mixing"] },
+                    { m: "Module 3 – Color & Enhancements", topics: ["Color correction vs grading", "Working with Lumetri color", "LUTs & cinematic looks", "Speed ramping & time remapping"] },
+                    { m: "Module 4 – Formats & Publishing", topics: ["Editing viral Reels & Shorts", "YouTube video structure", "Export settings for high quality", "AI video tools & captions"] }
+                ],
+                tools: ["Adobe Premiere Pro", "Adobe Audition", "CapCut", "VN Editor", "Photoshop (for thumbnails)", "AI voice tools"],
+                outcomes: ["YouTube Video Editor", "Reel Creator", "Social Media Editor", "Ad Editor", "Freelance Video Editor"],
+                features: ["100% practical classes", "Create 10+ social media videos", "AI video workflows", "Placement assistance", "Flexible batches", "Expert mentors"],
+                testi: { t: "The 3 months course was exactly what I needed. I started editing Reels for local businesses and making money in my second month!", n: "Karan Singh", r: "Reel Editor & Freelancer", av: "KS", c: "#DC2626" }
+            },
+            "Audio-Video Editing (6 Months)": {
+                desc: "Complete professional training in advanced video editing, sound engineering, and visual effects. Master Premiere Pro, After Effects, DaVinci Resolve and Audition.",
+                duration: "6 Months",
+                level: "Beginner to Advanced",
+                batch: "Morning / Evening",
+                cert: "Diploma in Audio-Video Editing",
+                highlights: [
+                    { i: "fa-solid fa-film", c: "#2563EB", bg: "#EFF6FF", t: "Advanced Workflows", d: "Multi-cam editing, offline/online editing" },
+                    { i: "fa-solid fa-music", c: "#7C3AED", bg: "#F5F0FF", t: "Sound Design", d: "Audio dynamics, Foley, multi-track mix" },
+                    { i: "fa-solid fa-wand-magic-sparkles", c: "#065F46", bg: "#ECFDF5", t: "Visual Effects", d: "After Effects rotoscoping, tracking & keying" },
+                    { i: "fa-solid fa-palette", c: "#D97706", bg: "#FFFBEB", t: "DaVinci Resolve", d: "Industry-standard color grading & nodes" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Industry Editing Workflows", topics: ["Advanced editing techniques", "Multi-camera editing", "Keyboard shortcut mastery", "Project organization & backups"] },
+                    { m: "Module 2 – Visual Effects & Motion", topics: ["After Effects basics", "Keyframing & masking", "Chroma keying (Green Screen)", "Text & title animations", "Camera tracking & stabilizing"] },
+                    { m: "Module 3 – Audio Engineering", topics: ["Sound design principles", "Multitrack mixing in Audition", "Foley sound & SFX libraries", "EQ, compression & mastering"] },
+                    { m: "Module 4 – Color Grading & DaVinci", topics: ["DaVinci Resolve workspace", "Color wheels, curves & qualifier nodes", "Matching colors between shots", "Professional exporting"] }
+                ],
+                tools: ["Adobe Premiere Pro", "Adobe After Effects", "DaVinci Resolve", "Adobe Audition", "PluralEyes", "AI Audio tools"],
+                outcomes: ["Film Editor", "Documentary Editor", "Visual Effects Artist", "Sound Designer", "Colorist", "Broadcast Editor"],
+                features: ["6-month intensive diploma", "Work on short films & documentaries", "Sound studio experience", "100% placement support", "Portfolio showreel build", "Industry internships"],
+                testi: { t: "Excellent course! The 6-month duration gives you enough time to master professional workflows. I'm now working in a production house.", n: "Aditya Jain", r: "Video Editor · Production House", av: "AJ", c: "#2563EB" }
+            },
+            "Advanced Diploma in Motion Graphics": {
+                desc: "Create stunning 2D/3D motion graphics, commercial promos, and broadcast designs. Master Adobe After Effects, Illustrator, and Cinema 4D. Best motion graphics course in Jaipur.",
+                duration: "12 Months",
+                level: "Beginner to Advanced",
+                batch: "Morning / Evening",
+                cert: "Advanced Diploma in Motion Graphics",
+                highlights: [
+                    { i: "fa-solid fa-cube", c: "#059669", bg: "#ECFDF5", t: "3D Motion Design", d: "Cinema 4D integration with After Effects" },
+                    { i: "fa-solid fa-bezier-curve", c: "#7C3AED", bg: "#F5F0FF", t: "2D Animation", d: "Keyframe curves, expressions, & physics" },
+                    { i: "fa-solid fa-tv", c: "#0369A1", bg: "#EFF6FF", t: "Broadcast Design", d: "TV channel packages, lower thirds, intros" },
+                    { i: "fa-solid fa-file-video", c: "#D97706", bg: "#FFFBEB", t: "Portfolio & Showreel", d: "Build a high-end commercial portfolio" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Vector Design & Asset Creation", topics: ["Design principles & styleboards", "Adobe Illustrator for assets", "Photoshop for composition", "Typography in motion"] },
+                    { m: "Module 2 – 2D Motion Graphics (After Effects)", topics: ["Keyframing & Graph Editor", "Kinetic typography", "Character rigging & walkcycles", "Shape layer animations", "Expressions & automation"] },
+                    { m: "Module 3 – 3D Motion Design (Cinema 4D)", topics: ["C4D interface & modeling", "Mograph module & cloners", "Materials, texturing & lighting", "Dynamics, physics & particles", "Rendering & compositing in AE"] },
+                    { m: "Module 4 – Advanced Projects", topics: ["Commercial promo creation", "UI/UX animations & app walkthroughs", "Broadcast channel branding", "Showreel development"] }
+                ],
+                tools: ["Adobe After Effects", "Cinema 4D", "Adobe Illustrator", "Photoshop", "Duik Bassel", "Red Giant Trapcode"],
+                outcomes: ["Motion Graphics Artist", "3D Animator", "Broadcast Designer", "Video Promo Designer", "UI Animator"],
+                features: ["1-year deep dive curriculum", "Cinema 4D + After Effects", "Weekly assignments & reviews", "Hiring partner network", "Live agency projects", "1-on-1 mentor guidance"],
+                testi: { t: "The Motion Graphics course was top-notch. I went from graphic design to making high-paying 3D animations for global clients.", n: "Pankaj Sharma", r: "Motion Designer · Remote Agency", av: "PS", c: "#059669" }
+            },
+            "AI Tools Certification": {
+                desc: "Supercharge your productivity, design, content creation, and workflows with modern AI. Learn ChatGPT, Midjourney, Runway, and automation tools. Best AI course in Jaipur.",
+                duration: "3 Months",
+                level: "Beginner to Intermediate",
+                batch: "Morning / Evening / Weekend",
+                cert: "Certified AI Specialist",
+                highlights: [
+                    { i: "fa-solid fa-comments", c: "#D97706", bg: "#FFFBEB", t: "LLM & Prompts", d: "ChatGPT, Claude, Gemini advanced prompting" },
+                    { i: "fa-solid fa-image", c: "#7C3AED", bg: "#F5F0FF", t: "AI Art & Design", d: "Midjourney, Stable Diffusion, Firefly" },
+                    { i: "fa-solid fa-clapperboard", c: "#0369A1", bg: "#EFF6FF", t: "AI Video & Audio", d: "Runway, Sora, ElevenLabs, Suno" },
+                    { i: "fa-solid fa-gears", c: "#065F46", bg: "#ECFDF5", t: "AI Workflows", d: "Zapier, Make, custom AI chatbots" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Advanced Prompt Engineering", topics: ["Generative AI basics", "Zero-shot, few-shot, system prompts", "ChatGPT custom instructions & GPTs", "Claude Projects & Gemini setups"] },
+                    { m: "Module 2 – AI Image Generation & Design", topics: ["Midjourney advanced parameters", "Stable Diffusion & ComfyUI", "Adobe Firefly in Photoshop", "AI upscale & vectorization"] },
+                    { m: "Module 3 – AI Video & Audio Production", topics: ["Runway Gen-2 & Gen-3", "Sora & Luma video workflows", "ElevenLabs voice cloning", "AI music generation (Suno/Udio)"] },
+                    { m: "Module 4 – Business Automation & SaaS", topics: ["n8n & Zapier automation", "Building custom chatbots", "AI for SEO & copy writing", "Monetization & freelancing"] }
+                ],
+                tools: ["ChatGPT", "Claude", "Midjourney", "Stable Diffusion", "RunwayML", "ElevenLabs", "Zapier", "Make.com", "Luma Dream Machine", "Adobe Firefly"],
+                outcomes: ["AI Prompt Engineer", "AI Content Specialist", "AI Workflow Automator", "AI Consultant", "Digital Creator"],
+                features: ["Hands-on practice with 25+ AI tools", "Build 5 live AI projects", "Lifetime AI prompts library", "Career guidance", "Community channel", "Expert instructors"],
+                testi: { t: "This course is a cheat code! I automated 80% of my daily marketing tasks and got a raise.", n: "Nidhi Saxena", r: "Marketing Manager", av: "NS", c: "#D97706" }
+            },
+            "2D-3D Animation": {
+                desc: "Launch your career in animation. Learn storyboarding, 2D character animation, and 3D modeling, rigging, and animation using Blender and Autodesk Maya.",
+                duration: "12 Months",
+                level: "Beginner to Advanced",
+                batch: "Morning / Evening",
+                cert: "Diploma in 2D & 3D Animation",
+                highlights: [
+                    { i: "fa-solid fa-pen", c: "#7C3AED", bg: "#F5F0FF", t: "Storyboarding", d: "Visual storytelling, layout & scripting" },
+                    { i: "fa-solid fa-shapes", c: "#2563EB", bg: "#EFF6FF", t: "3D Modeling", d: "Organic & hard-surface mesh design" },
+                    { i: "fa-solid fa-bone", c: "#065F46", bg: "#ECFDF5", t: "Rigging & Anatomy", d: "Create skeletal setups & skin weights" },
+                    { i: "fa-solid fa-running", c: "#D97706", bg: "#FFFBEB", t: "Character Animation", d: "Make characters walk, express and speak" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Storyboarding & 2D Animation", topics: ["Principles of animation", "Storyboarding & character sheets", "Adobe Animate basics", "Frame-by-frame 2D animation"] },
+                    { m: "Module 2 – 3D modeling & Texturing", topics: ["Autodesk Maya & Blender UI", "Polygon modeling & sculpting", "UV unwrapping & texturing", "Shaders & materials"] },
+                    { m: "Module 3 – Rigging & Animation", topics: ["Skeleton joints & bone setups", "IK/FK controls", "Rigging characters & props", "Keyframe character animation"] },
+                    { m: "Module 4 – Lighting, Rendering & Showreel", topics: ["Lighting rigs & rendering engines", "Arnold & Cycles rendering", "Video composition in Premiere", "Creating your final showreel"] }
+                ],
+                tools: ["Autodesk Maya", "Blender", "Adobe Animate", "Substance Painter", "Photoshop", "Premiere Pro"],
+                outcomes: ["3D Modeler", "Character Rigging Artist", "3D Animator", "2D Animator", "Storyboard Artist"],
+                features: ["1-year complete training", "Maya & Blender certification prep", "High-performance lab access", "Regular masterclasses", "100% placement support", "Dedicated portfolio review"],
+                testi: { t: "The trainers are industry veterans. They helped me build an animation reel that landed me a job at a top game studio.", n: "Manish Kumawat", r: "3D Animator · Game Studio", av: "MK", c: "#7C3AED" }
+            },
+            "VFX Course": {
+                desc: "Master the magic of visual effects for films, TV, and ads. Learn roto, keying, paint, tracking, matchmoving, and compositing in After Effects, Nuke, and Silhouette.",
+                duration: "12 Months",
+                level: "Beginner to Advanced",
+                batch: "Morning / Evening",
+                cert: "Advanced Diploma in VFX",
+                highlights: [
+                    { i: "fa-solid fa-eye-dropper", c: "#9D174D", bg: "#FDF2F8", t: "Chroma Keying", d: "Professional green screen extraction" },
+                    { i: "fa-solid fa-paint-brush", c: "#0369A1", bg: "#EFF6FF", t: "Roto & Paint", d: "Silhouette & Nuke clean-up workflows" },
+                    { i: "fa-solid fa-crosshairs", c: "#7C3AED", bg: "#F5F0FF", t: "3D Camera Tracking", d: "Integrating 3D objects with live footage" },
+                    { i: "fa-solid fa-cubes", c: "#065F46", bg: "#ECFDF5", t: "Node-based Compositing", d: "Industry-standard Nuke workflows" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – VFX Foundations & Rotoscope", topics: ["VFX pipelines & concepts", "Rotoscope in Silhouette & AE", "Chroma keying & green screen extraction", "Clean plate creation & digital paint"] },
+                    { m: "Module 2 – Matchmoving & Tracking", topics: ["2D & 3D camera tracking", "Mocha Pro planar tracking", "Object tracking & matchmoving", "Focal length & lens distortion"] },
+                    { m: "Module 3 – Nuke Compositing", topics: ["Nuke node-based interface", "Channel & merge nodes", "Color correction & grading in VFX", "Multi-pass CG integration"] },
+                    { m: "Module 4 – Dynamics & Showreel", topics: ["Fire, smoke, and water in Blender", "Particle setups", "Showreel composition", "Final project submission"] }
+                ],
+                tools: ["Foundry Nuke", "Silhouette FX", "Adobe After Effects", "Mocha Pro", "Blender", "Photoshop"],
+                outcomes: ["Compositing Artist", "Roto Artist", "Paint & Clean-up Artist", "Matchmove Artist", "VFX Supervisor"],
+                features: ["1-year intensive VFX syllabus", "Node-based compositing (Nuke)", "Industry project briefs", "Placement drives with top studio partners", "High-performance lab", "Showreel preparation"],
+                testi: { t: "Nuke training was amazing. I got hired by a post-production studio in Mumbai right after finishing my course.", n: "Vikrant Chaudhari", r: "Compositing Artist · VFX Studio", av: "VC", c: "#9D174D" }
+            },
+            "Data Analytics": {
+                desc: "Become a professional Data Analyst. Master Excel, SQL, Power BI, Tableau, and Python for data cleaning, analysis, and visualization. Best data analytics course in Jaipur.",
+                duration: "6 Months",
+                level: "Beginner to Intermediate",
+                batch: "Morning / Evening / Weekend",
+                cert: "Data Analytics Certificate",
+                highlights: [
+                    { i: "fa-solid fa-file-excel", c: "#0369A1", bg: "#EFF6FF", t: "Advanced Excel", d: "VLOOKUP, Pivot Tables, Power Query" },
+                    { i: "fa-solid fa-database", c: "#7C3AED", bg: "#F5F0FF", t: "SQL Queries", d: "Aggregate functions, joins, subqueries" },
+                    { i: "fa-solid fa-chart-line", c: "#065F46", bg: "#ECFDF5", t: "Power BI & Tableau", d: "Build interactive dashboards & reports" },
+                    { i: "fa-brands fa-python", c: "#D97706", bg: "#FFFBEB", t: "Python Analytics", d: "Pandas, NumPy, Matplotlib & Seaborn" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Advanced Business Excel", topics: ["Formulas, functions & lookups", "Pivot tables & pivot charts", "Power Query & data cleaning", "Macro basics & automation"] },
+                    { m: "Module 2 – SQL & Database Management", topics: ["SQL syntax & SELECT statements", "Joins, unions & subqueries", "Writing store procedures", "Database design & optimization"] },
+                    { m: "Module 3 – Business Intelligence Dashboards", topics: ["Power BI interface & data modeling", "DAX formulas & measures", "Tableau dashboard design", "Storytelling with data"] },
+                    { m: "Module 4 – Python for Data Analysis", topics: ["Python programming basics", "Pandas & NumPy data manipulation", "Data visualization libraries", "Final analytics project"] }
+                ],
+                tools: ["Microsoft Excel", "MySQL", "Power BI", "Tableau", "Python", "Jupyter Notebook", "Google Sheets"],
+                outcomes: ["Data Analyst", "Business Intelligence Analyst", "Reporting Analyst", "Data Consultant", "Operations Analyst"],
+                features: ["6-month practical syllabus", "10+ real dashboard projects", "SQL query live labs", "Placement support", "Resume & interview prep", "1-on-1 career guidance"],
+                testi: { t: "The data analytics course was incredibly detailed. Power BI and SQL projects helped me stand out in my interviews.", n: "Shubham Sen", r: "BI Analyst · Tech Corp", av: "SS", c: "#0369A1" }
+            },
+            "Diploma in Interior & Architecture": {
+                desc: "Master interior space planning, architectural drafting, 3D visualization, and walkthroughs using AutoCAD, 3ds Max, and SketchUp. Best interior design course in Jaipur.",
+                duration: "12 Months",
+                level: "Beginner to Advanced",
+                batch: "Morning / Evening",
+                cert: "Diploma in Interior Design",
+                highlights: [
+                    { i: "fa-solid fa-pencil-ruler", c: "#365314", bg: "#F7FEE7", t: "AutoCAD 2D/3D", d: "Architectural layouts & construction drafting" },
+                    { i: "fa-solid fa-couch", c: "#0369A1", bg: "#EFF6FF", t: "SketchUp 3D", d: "Rapid 3D modeling and custom furniture design" },
+                    { i: "fa-solid fa-home", c: "#7C3AED", bg: "#F5F0FF", t: "3ds Max & V-Ray", d: "High-end photo-realistic rendering" },
+                    { i: "fa-solid fa-video", c: "#065F46", bg: "#ECFDF5", t: "Walkthrough & Rendering", d: "Create realistic walkthrough animation video" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Space Planning & AutoCAD", topics: ["Interior design principles", "Anthropometrics & scale", "AutoCAD 2D floor plans", "Elevation & section drafting"] },
+                    { m: "Module 2 – SketchUp 3D Modeling", topics: ["SketchUp toolsets & groups", "Component & material mapping", "V-Ray basic render setups", "Lighting & interior styling"] },
+                    { m: "Module 3 – 3ds Max Professional Rendering", topics: ["3ds Max interface & geometry", "Poly-modeling furniture", "V-Ray and Corona advanced lighting", "High-res rendering settings"] },
+                    { m: "Module 4 – Walkthroughs & Portfolios", topics: ["Lumion walkthrough animation", "Video sequencing & editing", "Residential & Commercial design project", "Final design portfolio"] }
+                ],
+                tools: ["AutoCAD", "SketchUp", "3ds Max", "V-Ray", "Corona Renderer", "Lumion", "Photoshop"],
+                outcomes: ["Interior Designer", "3D Visualizer", "Draftsman", "Furniture Designer", "Design Consultant"],
+                features: ["1-year comprehensive course", "Autodesk certificate preparation", "Weekly design critiques", "Architectural site visits", "Placement support", "Design portfolio creation"],
+                testi: { t: "Autodesk tools are taught extremely well. I started taking freelance interior planning projects before my course ended.", n: "Anjali Gupta", r: "Interior Designer · Freelancer", av: "AG", c: "#365314" }
+            },
+            "Salesforce (Admin & Development)": {
+                desc: "Become a certified Salesforce professional. Master Salesforce Administration, Process Automation, Apex Coding, and Lightning Web Components (LWC). Best Salesforce course in Jaipur.",
+                duration: "12 Months",
+                level: "Beginner to Advanced",
+                batch: "Morning / Evening / Weekend",
+                cert: "Salesforce Admin & Dev Prep",
+                highlights: [
+                    { i: "fa-solid fa-users-cog", c: "#0284C7", bg: "#F0F9FF", t: "Salesforce Admin", d: "Configuring users, security, and schema" },
+                    { i: "fa-solid fa-network-wired", c: "#7C3AED", bg: "#F5F0FF", t: "Process Automation", d: "Workflows, validation, and advanced Flows" },
+                    { i: "fa-solid fa-code", c: "#065F46", bg: "#ECFDF5", t: "Apex Programming", d: "Apex triggers, classes, and SOQL queries" },
+                    { i: "fa-solid fa-laptop-code", c: "#D97706", bg: "#FFFBEB", t: "Lightning Components", d: "Building custom Salesforce LWC UI components" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Salesforce Admin Foundations", topics: ["Cloud computing basics", "Salesforce architecture & setup", "Creating custom objects & fields", "User profiles & sharing rules"] },
+                    { m: "Module 2 – Process Automation (Flows)", topics: ["Validation rules", "Record-triggered Flows", "Screen Flows & Schedule Flows", "Approval processes"] },
+                    { m: "Module 3 – Apex Coding (Backend)", topics: ["Apex syntax & oops concepts", "SOQL & SOSL database queries", "Apex triggers & handlers", "Unit testing & deployment"] },
+                    { m: "Module 4 – Lightning Web Components (LWC)", topics: ["Web components architecture", "HTML, CSS, JS in LWC", "Salesforce data binding in LWC", "Deploying custom apps"] }
+                ],
+                tools: ["Salesforce Developer Org", "VS Code", "Salesforce CLI", "Workbench", "Data Loader", "Git & GitHub"],
+                outcomes: ["Salesforce Administrator", "Salesforce Developer", "Salesforce Consultant", "Salesforce Business Analyst"],
+                features: ["1-year certified track", "Trailhead badges guidance", "Official certification prep", "Placement cell support", "Real customer projects", "Mock technical interviews"],
+                testi: { t: "I transitioned from non-tech to Salesforce developer in a year. The curriculum is completely hands-on and covers LWC.", n: "Pankaj Meena", r: "Salesforce Developer · Tech Company", av: "PM", c: "#0284C7" }
+            },
+            "Instagram/YouTube Content Creation": {
+                desc: "Master the art of visual storytelling and social media growth. Learn script writing, shooting, smartphone editing, and algorithms. Best content creation course in Jaipur.",
+                duration: "2 Months",
+                level: "Beginner to Intermediate",
+                batch: "Morning / Evening / Weekend",
+                cert: "Certified Content Creator",
+                highlights: [
+                    { i: "fa-solid fa-pen-fancy", c: "#EA580C", bg: "#FFF7ED", t: "Scripting & Hooking", d: "Write viral hooks and engaging scripts" },
+                    { i: "fa-solid fa-mobile-screen", c: "#0369A1", bg: "#EFF6FF", t: "Smartphone Shoots", d: "Cinematography, audio & lighting on mobile" },
+                    { i: "fa-solid fa-video", c: "#065F46", bg: "#ECFDF5", t: "Mobile Video Editing", d: "CapCut, VN, and Premiere Rush shortcuts" },
+                    { i: "fa-solid fa-bullhorn", c: "#7C3AED", bg: "#F5F0FF", t: "Algorithm & Growth", d: "SEO tags, CTR thumbnails, & viral metrics" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Idea & Scripting", topics: ["Niche selection & research", "Hook, story, call-to-action structure", "Scriptwriting for 60s Reels", "Storyboarding for YouTube videos"] },
+                    { m: "Module 2 – Shoots & Technicals", topics: ["Smartphone camera settings", "Three-point lighting setups", "Microphone selection & audio clear", "Posing & framing before camera"] },
+                    { m: "Module 3 – Video Editing on Mobile", topics: ["CapCut & VN editor layouts", "Cutting on beat & music syncing", "Adding auto-captions & keyframes", "Sound effects (SFX) & color grading"] },
+                    { m: "Module 4 – Brand Sponsorships & SEO", topics: ["Thumbnail design in Canva/PS", "YouTube & Reels SEO optimization", "Reading analytics dashboards", "Pitching brands for sponsorships"] }
+                ],
+                tools: ["CapCut (Mobile)", "VN Editor", "Canva", "YouTube Studio", "Instagram Insights", "Lightroom (Mobile)"],
+                outcomes: ["YouTube Content Creator", "Instagram Influencer", "Social Media Executive", "Brand Content Creator", "Freelance Reel Editor"],
+                features: ["2-month practical bootcamp", "Studio setup shoot practice", "Create 5 viral-ready videos", "Brand deal pitch templates", "Growth masterclasses", "Certificate"],
+                testi: { t: "This course boosted my confidence before the camera. My Instagram page grew from 1k to 20k followers in 2 months!", n: "Pooja Kumawat", r: "Travel & Lifestyle Influencer", av: "PK", c: "#EA580C" }
+            },
+            "C/C++ Language": {
+                desc: "Build a rock-solid programming foundation. Learn variables, loops, arrays, pointers, functions, memory allocation, and object-oriented programming in C and C++.",
+                duration: "3 Months",
+                level: "Absolute Beginner",
+                batch: "Morning / Evening / Weekend",
+                cert: "C/C++ Programming Certificate",
+                highlights: [
+                    { i: "fa-solid fa-terminal", c: "#4F46E5", bg: "#EEF2FF", t: "Logic & Code Syntax", d: "Variables, conditions, loops, recursion" },
+                    { i: "fa-solid fa-memory", c: "#0369A1", bg: "#EFF6FF", t: "Memory Pointers", d: "References, pointers, dynamic memory allocation" },
+                    { i: "fa-solid fa-cubes", c: "#7C3AED", bg: "#F5F0FF", t: "Object Oriented C++", d: "Classes, encapsulation, inheritance, polymorphism" },
+                    { i: "fa-solid fa-code-branch", c: "#065F46", bg: "#ECFDF5", t: "Basic Data Structures", d: "LinkedList, stacks, and queues implementation" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – C Programming Fundamentals", topics: ["C syntax & compiler setup", "Variables & data types", "Control statements (if/else, switch)", "Loops (for, while, do-while)"] },
+                    { m: "Module 2 – Arrays, Functions & Pointers in C", topics: ["Single & multidimensional arrays", "User-defined functions & scope", "Pointers & address operations", "Structures & unions, file I/O"] },
+                    { m: "Module 3 – Object-Oriented Programming with C++", topics: ["C++ class & object concepts", "Constructors & destructors", "Inheritance types (Single, Multiple)", "Operator overloading & polymorphism"] },
+                    { m: "Module 4 – Basic DSA in C/C++", topics: ["Memory allocation (malloc/calloc/new)", "Stack & Queue array implementations", "Singly Linked List coding", "Interview programming questions"] }
+                ],
+                tools: ["VS Code", "GCC / G++ Compiler", "Dev-C++", "Turbo C++ (optional)", "Linux terminal", "Git"],
+                outcomes: ["Foundation C/C++ Developer", "Computer Science Student Pro", "Embedded Systems Trainee", "Logic-ready Developer"],
+                features: ["3-month academic + practical", "50+ coding assignments", "Logic building focus", "Exam preparation help", "Interview prep", "Logic verification labs"],
+                testi: { t: "Being an engineering student, this course cleared all my doubts about pointers and memory. Outstanding foundation classes!", n: "Rohan Vashisht", r: "B.Tech CSE Student", av: "RV", c: "#4F46E5" }
+            },
+            "Artificial Intelligence Specialist": {
+                desc: "Become an Artificial Intelligence Specialist. Learn machine learning, neural networks, computer vision, NLP, transformers, and LLM integrations. Best AI course in Jaipur.",
+                duration: "6 Months",
+                level: "Intermediate to Advanced",
+                batch: "Morning / Evening",
+                cert: "Certified AI Specialist",
+                highlights: [
+                    { i: "fa-solid fa-brain", c: "#7C3AED", bg: "#F5F0FF", t: "Deep Learning Neural Nets", d: "TensorFlow & PyTorch model development" },
+                    { i: "fa-solid fa-eye", c: "#0369A1", bg: "#EFF6FF", t: "Computer Vision", d: "Object detection, YOLO, OpenCV image filter" },
+                    { i: "fa-solid fa-comment-dots", c: "#065F46", bg: "#ECFDF5", t: "Natural Language Processing", d: "Text classification, tokenization, BERT" },
+                    { i: "fa-solid fa-gears", c: "#D97706", bg: "#FFFBEB", t: "LLMs & RAG Systems", d: "LangChain agent building & API deploy" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Advanced ML & Deep Learning", topics: ["Supervised vs Unsupervised models", "Multi-layer perceptrons (MLP)", "Backpropagation & optimization", "PyTorch fundamentals"] },
+                    { m: "Module 2 – Computer Vision (CV)", topics: ["Image processing with OpenCV", "Convolutional Neural Networks (CNN)", "Object detection with YOLO", "Transfer learning with ResNet"] },
+                    { m: "Module 3 – NLP & Transformers", topics: ["Recurrent Neural Networks (RNN)", "Word embeddings (Word2Vec, GloVe)", "Attention mechanism & Transformers", "Fine-tuning pre-trained models"] },
+                    { m: "Module 4 – LLMs, RAG & Agents", topics: ["OpenAI & Anthropic API models", "Vector databases (ChromaDB, Pinecone)", "Retrieval Augmented Generation (RAG)", "LangChain agent workflows"] }
+                ],
+                tools: ["Python", "PyTorch", "TensorFlow", "OpenCV", "Hugging Face", "ChromaDB", "LangChain", "OpenAI API", "Google Colab", "GitHub"],
+                outcomes: ["AI Engineer", "Computer Vision Specialist", "NLP Engineer", "Generative AI Developer", "Research Engineer"],
+                features: ["6-month advanced curriculum", "8+ industry grade projects", "GPU server labs access", "MAANG placement support", "GitHub profile building", "1-on-1 mentor sessions"],
+                testi: { t: "The NLP and LangChain modules were absolutely amazing. I built a custom support AI bot and landed a job instantly.", n: "Aditya Verma", r: "AI Engineer · MNC", av: "AV", c: "#7C3AED" }
+            },
+            "Cloud Computing": {
+                desc: "Master cloud infrastructure and administration on AWS and Microsoft Azure. Learn virtualization, cloud networks, security, database migration, and DevOps. Best cloud course in Jaipur.",
+                duration: "6 Months",
+                level: "Beginner to Intermediate",
+                batch: "Morning / Evening",
+                cert: "Cloud Solutions Architect Prep",
+                highlights: [
+                    { i: "fa-solid fa-server", c: "#0891B2", bg: "#ECFEFF", t: "AWS Cloud Services", d: "EC2 instances, S3 storage, RDS database" },
+                    { i: "fa-solid fa-cloud", c: "#2563EB", bg: "#EFF6FF", t: "Azure Infrastructure", d: "Azure VMs, Virtual Networks, IAM profiles" },
+                    { i: "fa-solid fa-shield-alt", c: "#065F46", bg: "#ECFDF5", t: "Cloud Security", d: "Firewalls, access management, certificates" },
+                    { i: "fa-solid fa-infinity", c: "#7C3AED", bg: "#F5F0FF", t: "DevOps Foundations", d: "Docker containers, Git pipelines, CI/CD" }
+                ],
+                curriculum: [
+                    { m: "Module 1 – Cloud Fundamentals & Networking", topics: ["Virtualization & cloud basics", "IP addressing & subnetting", "Virtual Private Cloud (VPC) config", "Load balancers & route tables"] },
+                    { m: "Module 2 – AWS Administration", topics: ["EC2 virtual servers setup", "S3 object storage & Glacier archiving", "RDS & database management", "AWS Identity & Access Management (IAM)"] },
+                    { m: "Module 3 – Microsoft Azure Administration", topics: ["Azure virtual machines & disks", "Azure Blob storage & file shares", "Active Directory integration", "Monitoring & resource groups"] },
+                    { m: "Module 4 – DevOps & Migration", topics: ["Docker container creation", "Kubernetes orchestration basics", "CI/CD pipelines with GitHub Actions", "Database migration to cloud"] }
+                ],
+                tools: ["AWS Console", "Azure Portal", "Docker", "Kubernetes", "Linux Terminal", "Git Actions", "Terraform (basics)"],
+                outcomes: ["Cloud Administrator", "AWS Architect", "Azure Engineer", "DevOps Engineer", "Cloud Support Specialist"],
+                features: ["6-month practical labs", "AWS/Azure voucher support", "Docker & CI/CD workflows", "Placement cell support", "Live lab cloud accounts", "Resume reviews"],
+                testi: { t: "Super hands-on training. Doing labs on AWS console helped me clear the AWS Solutions Architect exam on my first try.", n: "Manvendra Singh", r: "Cloud Associate · Tech Corp", av: "MS", c: "#0891B2" }
+            },
             "Digital Marketing with AI": { desc: "Master the complete digital marketing ecosystem — SEO, Google Ads, Meta Ads, email marketing, content strategy — supercharged with AI tools. Best digital marketing course in Jaipur with Google & Meta certification.", duration: "4 Months", level: "Beginner to Advanced", batch: "Morning / Evening / Weekend", cert: "Google + Meta + Creatix Certificate", highlights: [{ i: "fa-solid fa-robot", c: "#B45309", bg: "#FFFBEB", t: "AI-Powered Marketing", d: "ChatGPT, Jasper & AI ad copy tools" }, { i: "fa-brands fa-google", c: "#DC2626", bg: "#FFF0F0", t: "Google Ads Certified", d: "Prepare for Google Ads certification" }, { i: "fa-solid fa-chart-bar", c: "#0369A1", bg: "#EFF6FF", t: "Live Campaign Projects", d: "Run real ads with live ad budget" }, { i: "fa-solid fa-indian-rupee-sign", c: "#065F46", bg: "#ECFDF5", t: "High-Paying Roles", d: "Average salary ₹4-12 LPA in this field" }], curriculum: [{ m: "Module 1 – Digital Foundations", topics: ["Digital Marketing overview & strategy", "Website fundamentals (WordPress)", "Google Analytics 4 setup & reporting", "Landing page design & optimization", "Email marketing with Mailchimp"] }, { m: "Module 2 – SEO & Content", topics: ["On-page & off-page SEO", "Keyword research (Ahrefs, SEMrush)", "Blog writing & content strategy", "YouTube SEO & optimization", "AI content creation (ChatGPT, Jasper)"] }, { m: "Module 3 – Paid Advertising", topics: ["Google Search & Display Ads", "Meta (Facebook/Instagram) Ads", "Retargeting & Lookalike audiences", "Ad copywriting with AI tools", "ROI analysis & scaling strategies"] }, { m: "Module 4 – Social & Strategy", topics: ["Instagram & LinkedIn marketing", "Social media calendar planning", "Influencer marketing strategies", "Marketing automation tools", "Agency model & freelancing"] }], tools: ["Google Ads", "Meta Ads Manager", "Google Analytics 4", "SEMrush", "Ahrefs", "ChatGPT", "Jasper AI", "Mailchimp", "Canva", "WordPress", "HubSpot", "Hootsuite"], outcomes: ["SEO Specialist", "Social Media Manager", "PPC Expert", "Email Marketer", "Content Strategist", "Brand Manager", "Digital Marketing Manager", "AI Marketing Specialist"], features: ["Google & Meta Certifications included", "Live campaign with real ad budget", "SEMrush & Ahrefs access", "AI tools for content & ads", "200+ hiring partner network", "Portfolio of 5+ campaign case studies", "Freelancing income guide", "Dedicated placement support"], testi: { t: "Creatix's Digital Marketing course is the best I've attended. Got a job as an SEO Specialist within 2 months!", n: "Priya Sharma", r: "SEO Specialist · Marketing Agency", av: "PS", c: "#B45309" } },
             "Data Science with AI": { desc: "Become a data professional with Python, Machine Learning, Deep Learning, NLP & AI. Best data science course in Jaipur for beginners to advanced learners.", duration: "6 Months", level: "Beginner (Python basics covered)", batch: "Morning / Evening / Weekend", cert: "Creatix + Industry Certificate", highlights: [{ i: "fa-brands fa-python", c: "#0369A1", bg: "#EFF6FF", t: "Python Programming", d: "From basics to advanced data workflows" }, { i: "fa-solid fa-brain", c: "#7C3AED", bg: "#F5F0FF", t: "Machine Learning", d: "Scikit-learn, TensorFlow & PyTorch" }, { i: "fa-solid fa-database", c: "#B45309", bg: "#FFFBEB", t: "Real Datasets", d: "Work on Kaggle & industry datasets" }, { i: "fa-solid fa-indian-rupee-sign", c: "#065F46", bg: "#ECFDF5", t: "₹8-25 LPA Roles", d: "Among the highest paid tech careers" }], curriculum: [{ m: "Module 1 – Python & Statistics", topics: ["Python programming from scratch", "NumPy, Pandas & data manipulation", "Statistics & probability fundamentals", "Data visualization (Matplotlib, Seaborn)", "SQL for data analysis"] }, { m: "Module 2 – Machine Learning", topics: ["Supervised & unsupervised learning", "Scikit-learn implementation", "Decision Trees, Random Forest, XGBoost", "Model evaluation & hyperparameter tuning", "Feature engineering & selection"] }, { m: "Module 3 – Deep Learning & AI", topics: ["Neural networks from scratch", "TensorFlow & Keras deep learning", "Computer Vision (CNN models)", "NLP & text processing", "Generative AI & LLM integration"] }, { m: "Module 4 – Real Projects & Deployment", topics: ["End-to-end ML project lifecycle", "Model deployment with Flask/FastAPI", "Power BI & Tableau dashboards", "Kaggle competition strategies", "Data Science interview preparation"] }], tools: ["Python", "Jupyter Notebook", "Pandas", "NumPy", "Scikit-learn", "TensorFlow", "PyTorch", "Power BI", "Tableau", "SQL", "ChatGPT API", "Hugging Face"], outcomes: ["Data Analyst", "Data Scientist", "ML Engineer", "BI Analyst", "AI Researcher", "NLP Engineer", "Data Visualization Expert", "Product Analyst"], features: ["6-month in-depth program", "Python from absolute basics", "10+ capstone projects", "Kaggle competitions guided", "Industry datasets access", "Placement with top MNCs", "Resume & interview coaching", "1-on-1 mentor sessions"], testi: { t: "The curriculum is perfectly up-to-date with real AI tools. My salary doubled after this course!", n: "Amit Verma", r: "Data Analyst · MNC Jaipur", av: "AV", c: "#0369A1" } },
             "Generative AI": { desc: "Master the AI revolution — prompt engineering, LLM fine-tuning, AI agents, image generation, chatbot development. Best generative AI course in Jaipur.", duration: "2 Months", level: "Intermediate", batch: "Morning / Evening / Weekend", cert: "Creatix AI Certificate", highlights: [{ i: "fa-solid fa-robot", c: "#7C3AED", bg: "#F5F0FF", t: "ChatGPT & GPT-4 API", d: "Build AI-powered apps & workflows" }, { i: "fa-solid fa-image", c: "#C2410C", bg: "#FFF7ED", t: "AI Image Generation", d: "Midjourney, DALL-E & Stable Diffusion" }, { i: "fa-solid fa-bolt", c: "#B45309", bg: "#FFFBEB", t: "AI Automation", d: "n8n, Zapier & Make.com AI workflows" }, { i: "fa-solid fa-trending-up", c: "#065F46", bg: "#ECFDF5", t: "Fastest Growing Field", d: "Highest demand career in 2025" }], curriculum: [{ m: "Module 1 – LLM Fundamentals", topics: ["How Large Language Models work", "ChatGPT, Claude & Gemini mastery", "Prompt engineering techniques", "System prompts & few-shot learning", "Evaluating & comparing AI outputs"] }, { m: "Module 2 – AI Image & Video", topics: ["Midjourney advanced prompting", "Stable Diffusion & ComfyUI", "DALL-E 3 & Adobe Firefly", "AI video with RunwayML & Sora", "Building AI creative workflows"] }, { m: "Module 3 – Building AI Products", topics: ["OpenAI & Anthropic API integration", "Building chatbots with GPT API", "RAG (Retrieval Augmented Generation)", "LangChain & AI agents", "AI-powered content pipelines"] }, { m: "Module 4 – AI Automation & Business", topics: ["n8n & Zapier AI automation", "AI for marketing & content creation", "Building AI SaaS products", "Monetizing AI skills & consulting", "AI freelancing income strategies"] }], tools: ["ChatGPT", "Claude", "Gemini", "Midjourney", "Stable Diffusion", "RunwayML", "OpenAI API", "LangChain", "n8n", "Zapier", "Hugging Face", "Perplexity AI"], outcomes: ["AI Prompt Engineer", "AI Content Creator", "LLM Developer", "AI Consultant", "Chatbot Developer", "AI Tools Trainer", "Generative AI Specialist", "AI Product Manager"], features: ["Hands-on with 15+ AI tools", "Build 3 AI-powered products", "Access to premium AI tools", "API integration projects", "Highest demand skill in 2025", "Freelancing income strategies", "Community of AI learners", "Certificate of expertise"], testi: { t: "This course is the future! I now consult businesses on AI automation and earn more in a month than before.", n: "Vikram Joshi", r: "AI Consultant · Freelancer", av: "VJ", c: "#7C3AED" } },
@@ -5763,7 +6156,7 @@
             "Programming": { desc: "Learn Python and Java programming from scratch. Build problem-solving skills and data structures for tech company interviews. Best programming course in Jaipur.", duration: "3 Months", level: "Beginner to Intermediate", batch: "Morning / Evening / Weekend", cert: "Creatix Programming Certificate", highlights: [{ i: "fa-brands fa-python", c: "#3730A3", bg: "#EEF2FF", t: "Python & Java", d: "Two most in-demand programming languages" }, { i: "fa-solid fa-diagram-project", c: "#0369A1", bg: "#EFF6FF", t: "DSA Mastery", d: "Data structures & algorithms for interviews" }, { i: "fa-solid fa-robot", c: "#7C3AED", bg: "#F5F0FF", t: "AI-Assisted Coding", d: "GitHub Copilot & ChatGPT for development" }, { i: "fa-solid fa-building", c: "#065F46", bg: "#ECFDF5", t: "MAANG Prep", d: "Prepare for top tech company interviews" }], curriculum: [{ m: "Module 1 – Python Fundamentals", topics: ["Variables, data types & operators", "Control flow (if/else, loops)", "Functions & modules", "Object-oriented programming", "File handling & exceptions"] }, { m: "Module 2 – Data Structures & Algorithms", topics: ["Arrays, linked lists & stacks", "Trees, graphs & heaps", "Sorting & searching algorithms", "Dynamic programming", "Time & space complexity (Big O)"] }, { m: "Module 3 – Java Programming", topics: ["Java syntax & object-oriented concepts", "Collections framework", "Exception handling", "Multithreading basics", "Spring Boot introduction"] }, { m: "Module 4 – Projects & Interview Prep", topics: ["5 capstone projects (Python & Java)", "LeetCode problem solving strategies", "System design basics", "Mock technical interviews", "GitHub portfolio building"] }], tools: ["Python", "Java", "VS Code", "PyCharm", "IntelliJ IDEA", "GitHub", "LeetCode", "HackerRank", "Jupyter Notebook", "GitHub Copilot", "ChatGPT", "Linux Terminal"], outcomes: ["Python Developer", "Java Developer", "Software Engineer", "App Developer", "Automation Tester", "DevOps Engineer", "Cloud Developer", "AI/ML Developer"], features: ["Python & Java both covered", "DSA for interview preparation", "5 portfolio projects", "LeetCode coaching", "GitHub profile optimization", "MAANG interview strategies", "Resume with tech projects", "Placement support"], testi: { t: "The programming course gave me a solid foundation. Cracked my first software engineer interview within 2 months!", n: "Rohit Gupta", r: "Software Engineer · IT Company", av: "RG", c: "#3730A3" } },
             "Spoken English": { desc: "Build strong English communication skills for corporate interviews, presentations, and daily professional interactions. Best spoken English course in Jaipur.", duration: "2 Months", level: "Beginner to Advanced", batch: "Morning / Evening / Weekend", cert: "Creatix Communication Certificate", highlights: [{ i: "fa-solid fa-microphone", c: "#0369A1", bg: "#F0F9FF", t: "Daily Practice Sessions", d: "Live conversation practice every class" }, { i: "fa-solid fa-user-tie", c: "#065F46", bg: "#ECFDF5", t: "Interview Preparation", d: "Mock interviews with real feedback" }, { i: "fa-solid fa-presentation-screen", c: "#7C3AED", bg: "#F5F0FF", t: "Public Speaking", d: "Group discussions & presentation skills" }, { i: "fa-solid fa-brain", c: "#B45309", bg: "#FFFBEB", t: "Grammar Mastery", d: "Practical grammar without boring rules" }], curriculum: [{ m: "Module 1 – Foundation", topics: ["Common grammar mistakes & correction", "Vocabulary building techniques", "Pronunciation & accent training", "Daily English conversation practice", "Reading & listening exercises"] }, { m: "Module 2 – Professional English", topics: ["Business email & letter writing", "Phone & video call etiquette", "Meetings & presentations in English", "Formal vs informal communication", "Technical vocabulary for your field"] }, { m: "Module 3 – Interview & GD", topics: ["HR interview question practice", "Common interview answers (STAR method)", "Group discussion techniques & strategies", "Body language & confidence tips", "Mock interviews with video review"] }, { m: "Module 4 – Advanced Communication", topics: ["Public speaking & storytelling", "Persuasion & negotiation techniques", "Cross-cultural communication", "English for social media & content", "Advanced vocabulary & idioms"] }], tools: ["Grammarly", "ELSA Speak App", "Duolingo (practice)", "Zoom (presentation practice)", "ChatGPT (writing practice)", "YouTube (accent training)", "WhatsApp group practice", "Loom (video recording)"], outcomes: ["Corporate Professional", "HR Executive", "Customer Support Executive", "Content Creator", "Teacher/Trainer", "BPO Executive", "Interview-Ready Graduate", "Confident Public Speaker"], features: ["Small batch sizes (max 12 students)", "Daily conversation practice", "Mock interviews included", "Professional email writing", "Group discussion sessions", "Personality development", "Certificate on completion", "Lifetime WhatsApp group access"], testi: { t: "My English was very poor but after 2 months at Creatix I confidently give presentations at work. Got promoted within 3 months!", n: "Sunita Agarwal", r: "Corporate Executive · Jaipur", av: "SA", c: "#0369A1" } },
             "Tally": { desc: "Master Tally Prime for accounting, GST filing, payroll management, and financial reporting. Best Tally course in Jaipur for accountants and finance professionals.", duration: "2 Months", level: "Beginner to Advanced", batch: "Morning / Evening / Weekend", cert: "Tally + Creatix Certificate", highlights: [{ i: "fa-solid fa-calculator", c: "#365314", bg: "#F7FEE7", t: "Tally Prime Latest", d: "Latest version with all advanced features" }, { i: "fa-solid fa-file-invoice", c: "#0369A1", bg: "#EFF6FF", t: "GST Filing", d: "Complete GST returns & compliance" }, { i: "fa-solid fa-users", c: "#B45309", bg: "#FFFBEB", t: "Payroll Management", d: "Employee salary, PF & ESI processing" }, { i: "fa-solid fa-chart-pie", c: "#DC2626", bg: "#FFF0F0", t: "Financial Reports", d: "Balance sheet, P&L & cash flow reports" }], curriculum: [{ m: "Module 1 – Tally Basics", topics: ["Company creation & setup in Tally Prime", "Chart of accounts & ledgers", "Voucher entry (sales, purchase, payments)", "Bank reconciliation", "Basic financial reports"] }, { m: "Module 2 – GST in Tally", topics: ["GST configuration in Tally", "GST invoice creation & recording", "GSTR-1, GSTR-3B filing", "Input tax credit & reconciliation", "E-way bill generation"] }, { m: "Module 3 – Advanced Tally", topics: ["Inventory management", "Cost centers & job costing", "Payroll processing (PF, ESI, TDS)", "Budget & scenario management", "Multi-currency transactions"] }, { m: "Module 4 – MIS & Reporting", topics: ["Management information system reports", "Ratio analysis & financial KPIs", "Audit features in Tally", "Data backup & security", "Freelancing as Tally expert"] }], tools: ["Tally Prime", "GST Portal", "Income Tax Portal", "Excel (for reporting)", "TallyVault", "Busy Accounting (overview)", "QuickBooks (overview)", "Zoho Books (overview)"], outcomes: ["Accountant", "Tally Operator", "Finance Executive", "Tax Consultant", "Bookkeeper", "GST Filer", "Payroll Manager", "Bank Executive"], features: ["Latest Tally Prime version", "GST filing hands-on", "Payroll & PF processing", "Real company data practice", "Job placement in accounting firms", "Certificate recognized by employers", "Small practical batches", "Lifetime software access"], testi: { t: "Got a job as an accountant within 1 month of completing the Tally course. The GST filing training was especially useful!", n: "Pooja Sharma", r: "Accountant · CA Firm Jaipur", av: "PS", c: "#365314" } },
-            "Photography": { desc: "Master DSLR & mirrorless camera techniques, lighting, composition, and post-processing with Lightroom. Best photography course in Jaipur for beginners and professionals.", duration: "2 Months", level: "Beginner to Advanced", batch: "Morning / Evening / Weekend", cert: "Creatix Photography Certificate", highlights: [{ i: "fa-solid fa-camera", c: "#881337", bg: "#FFF1F2", t: "DSLR & Mirrorless Mastery", d: "Camera settings, modes & techniques" }, { i: "fa-solid fa-sun", c: "#B45309", bg: "#FFFBEB", t: "Studio Lighting Setup", d: "Natural & artificial lighting mastery" }, { i: "fa-solid fa-wand-magic-sparkles", c: "#7C3AED", bg: "#F5F0FF", t: "Adobe Lightroom & Photoshop", d: "Professional photo editing & retouching" }, { i: "fa-solid fa-indian-rupee-sign", c: "#065F46", bg: "#ECFDF5", t: "Photography Business", d: "Earn ₹30k-₹2L per month as photographer" }], curriculum: [{ m: "Module 1 – Camera Fundamentals", topics: ["Camera anatomy & lens types", "Exposure triangle (ISO, aperture, shutter)", "Shooting modes (Manual, Aperture priority)", "White balance & color temperature", "RAW vs JPEG shooting"] }, { m: "Module 2 – Composition & Lighting", topics: ["Rule of thirds & advanced composition", "Natural light photography", "Artificial & studio lighting setup", "Reflectors, diffusers & flash", "Golden hour & blue hour photography"] }, { m: "Module 3 – Specialization", topics: ["Portrait photography & posing", "Product photography for e-commerce", "Wedding & event photography", "Food & restaurant photography", "Architecture & real estate photography"] }, { m: "Module 4 – Editing & Business", topics: ["Adobe Lightroom complete workflow", "Photoshop retouching & compositing", "AI editing tools (Luminar, Topaz)", "Building photography portfolio", "Pricing, marketing & getting clients"] }], tools: ["Adobe Lightroom", "Adobe Photoshop", "Luminar Neo", "Topaz Sharpen AI", "Canva (for marketing)", "Instagram (portfolio)", "Behance", "Pixpa (portfolio site)", "Google Drive", "Dropbox"], outcomes: ["Professional Photographer", "Product Photographer", "Wedding Photographer", "Portrait Artist", "Photojournalist", "Studio Owner", "Instagram Creator", "Brand Photographer"], features: ["Hands-on DSLR practice sessions", "Studio lighting practice", "3 outdoor shoot assignments", "Full Lightroom workflow", "AI photo editing tools", "Business & pricing guidance", "Portfolio website setup", "Certificate of completion"], testi: { t: "I started as a complete beginner with just a phone camera. Now I own a photography studio and shoot weddings. Creatix made this possible!", n: "Manish Verma", r: "Wedding Photographer · Studio Owner", av: "MV", c: "#881337" } },
+            "Photography": { desc: "Master DSLR & mirrorless camera techniques, lighting, composition, and post-processing with Lightroom. Best photography course in Jaipur for beginners and professionals.", duration: "2 Months", level: "Beginner to Advanced", batch: "Morning / Evening / Weekend", cert: "Creatix Photography Certificate", highlights: [{ i: "fa-solid fa-camera", c: "#881337", bg: "#FFF1F2", t: "DSLR & Mirrorless Mastery", d: "Camera settings, modes & techniques" }, { i: "fa-solid fa-sun", c: "#B45309", bg: "#FFFBEB", t: "Studio Lighting Setup", d: "Natural & artificial lighting mastery" }, { i: "fa-solid fa-wand-magic-sparkles", c: "#7C3AED", bg: "#F5F0FF", t: "Adobe Lightroom & Photoshop", d: "Professional photo editing & retouching" }, { i: "fa-solid fa-indian-rupee-sign", c: "#065F46", bg: "#ECFDF5", t: "Photography Business", d: "Earn ₹30k-₹2L per month as photographer" }], curriculum: [{ m: "Module 1 – Camera Fundamentals", topics: ["Camera anatomy & lens types", "Exposure triangle (ISO, aperture, shutter)", "Shooting modes (Manual, Aperture priority)", "White balance & color temperature", "RAW vs JPEG shooting"] }, { m: "Module 2 – Composition & Lighting", topics: ["Rule of thirds & advanced composition", "Natural light photography", "Artificial & studio lighting setup", "Reflectors, diffusers & flash", "Golden hour & blue hour photography"] }, { m: "Module 3 – Specialization", topics: ["Portrait photography & posing", "Product photography for e-commerce", "Wedding & event photography", "Food & restaurant photography", "Architecture & real estate photography"] }, { m: "Module 4 – Editing & Business", topics: ["Adobe Lightroom complete workflow", "Photoshop retouching & compositing", "AI editing tools (Luminar, Topaz)", "Building photography portfolio", "Pricing, marketing & getting clients"] }], tools: ["Adobe Lightroom", "Adobe Photoshop", "Luminar Neo", "Topaz Sharpen AI", "Canva (for marketing)", "Instagram (portfolio)", "Behance", "Pixpa (portfolio site)", "Google Drive", "Dropbox"], outcomes: ["Professional Photographer", "Product Photographer", "Wedding Photographer", "Portrait Artist", "Photojournalist", "Studio Owner", "Instagram Creator", "Brand Photographer"], features: ["Hands-on DSLR practice sessions", "Studio lighting practice", "3 outdoor shoot assignments", "Full Lightroom workflow", "AI photo editing tools", "Business & pricing guidance", "Portfolio website setup", "Certificate of completion"], testi: { t: "I started as a complete beginner with just a phone camera. Now I own a photography studio and shoot weddings. Creatix made this possible!", n: "Manish Verma", r: "Wedding Photographer · Studio Owner", av: "MV", c: "#881337" } }
         };
 
         const TESTI = [
@@ -5919,31 +6312,22 @@
         }
 
         function rNavDD() {
-            const ICONS = [
-                { n: "B.Voc", e: "🎓", bg: "#F5F0FF", tc: "#5B21B6", tb: "#EDE9FE", tag: "Degree" },
-                { n: "Video Editing", e: "🎬", bg: "#FFF0F0", tc: "#B91C1C", tb: "#FEE2E2", tag: "Motion Graphics" },
-                { n: "Digital Marketing with AI", e: "📢", bg: "#FFFBEB", tc: "#92400E", tb: "#FEF3C7", tag: "🔥 Trending" },
-                { n: "Data Science with AI", e: "🗄️", bg: "#EFF6FF", tc: "#1E40AF", tb: "#DBEAFE", tag: "High Salary" },
-                { n: "Generative AI", e: "🤖", bg: "#F5F0FF", tc: "#5B21B6", tb: "#EDE9FE", tag: "🔥 Hot" },
-                { n: "Graphic Design with AI", e: "✏️", bg: "#FFF7ED", tc: "#9A3412", tb: "#FFEDD5", tag: "Creative" },
-                { n: "UI-UX Design", e: "🪄", bg: "#FDF2F8", tc: "#831843", tb: "#FCE7F3", tag: "In Demand" },
-                { n: "Web Development", e: "💻", bg: "#ECFDF5", tc: "#064E3B", tb: "#D1FAE5", tag: "In Demand" },
-                { n: "Ethical Hacking", e: "🛡️", bg: "#F0FDF4", tc: "#14532D", tb: "#DCFCE7", tag: "Expert" },
-                { n: "Programming", e: "⌨️", bg: "#EEF2FF", tc: "#3730A3", tb: "#E0E7FF", tag: "Foundation" },
-                { n: "Spoken English", e: "🎤", bg: "#F0F9FF", tc: "#075985", tb: "#E0F2FE", tag: "Soft Skill" },
-                { n: "Tally", e: "🧮", bg: "#F7FEE7", tc: "#365314", tb: "#ECFCCB", tag: "Finance" },
-                { n: "Photography", e: "📷", bg: "#FFF1F2", tc: "#881337", tb: "#FFE4E6", tag: "Creative" },
-            ];
-            const cards = ICONS.map(c => `
+            const cards = COURSES.map(c => `
     <div class="mega-card" onclick="openCourse('${c.n}')" role="menuitem" tabindex="0" aria-label="${c.n} course in Jaipur">
-      <div class="mega-card-ico" style="background:${c.bg}" aria-hidden="true">${c.e}</div>
+      <div class="mega-card-ico" style="background:${c.bg}" aria-hidden="true"><i class="${c.i}" style="color:${c.c}"></i></div>
       <div class="mega-card-name">${c.n}</div>
       <span class="mega-card-tag" style="background:${c.tb};color:${c.tc}">${c.tag}</span>
     </div>`).join('');
             const more = `<div class="mega-card mega-card-more"><div style="font-size:.72rem;color:var(--red);font-weight:600">+ More Coming</div><div style="font-size:.65rem;color:var(--text-muted);margin-top:2px">New batches monthly</div></div>`;
             document.getElementById('navCoursesDD').innerHTML = `
     <div class="mega-hd">
-      <span class="mega-hd-lbl">All Programs · 13 Courses in Jaipur</span>
+      <span class="mega-hd-lbl">All Programs · ${COURSES.length} Courses in Jaipur</span>
+      <div class="mega-quick-links">
+        <span style="font-weight:700; color:var(--text-muted); font-size: 0.68rem; text-transform: uppercase;">Quick Access:</span>
+        <a onclick="openCourse('Audio-Video Editing (3 Months)')" class="mega-q-link" role="button" tabindex="0">🎬 Video Editing</a>
+        <a onclick="openCourse('AI Tools Certification')" class="mega-q-link" role="button" tabindex="0">🤖 AI Tools</a>
+        <a onclick="openCourse('Digital Marketing with AI')" class="mega-q-link" role="button" tabindex="0">📢 Digital Marketing</a>
+      </div>
       <span class="mega-hd-cta" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})" role="link" tabindex="0">View all ↓</span>
     </div>
     <div class="mega-grid">${cards}${more}</div>
@@ -6085,7 +6469,7 @@
             if (!cr) { alert('Please select a course'); return; }
             sendLeadEmail(nm, ph, cr, "Hero Form", "Home Page");
             const msg = `Hello Creatix! 👋\n\nI am interested in the *${cr}* course in Jaipur.\n\n📌 Name: ${nm}\n📞 Phone: ${ph}\n\nKindly guide me with the next steps.`;
-            window.open(`https://wa.me/918854800811?text=${encodeURIComponent(msg)}`, '_blank');
+            window.location.href = `thankyou.html?name=${encodeURIComponent(nm)}&phone=${encodeURIComponent(ph)}&course=${encodeURIComponent(cr)}&msg=${encodeURIComponent(msg)}`;
         }
 
         function cpEnrollForm() {
@@ -6095,14 +6479,14 @@
             if (!ph || ph.replace(/\D/g, '').length < 10) { alert('Please enter a valid phone number'); return; }
             sendLeadEmail(nm, ph, currentCourse, "Course Page Form", currentCourse + " Page");
             const msg = `Hello Creatix! 👋\n\nI am interested in the *${currentCourse}* course in Jaipur.\n\n📌 Name: ${nm}\n📞 Phone: ${ph}\n\nKindly guide me.`;
-            window.open(`https://wa.me/918854800811?text=${encodeURIComponent(msg)}`, '_blank');
+            window.location.href = `thankyou.html?name=${encodeURIComponent(nm)}&phone=${encodeURIComponent(ph)}&course=${encodeURIComponent(currentCourse)}&msg=${encodeURIComponent(msg)}`;
         }
 
         /* ========== FRANCHISE ========== */
         function franchiseEnquiry() {
             sendLeadEmail("Franchise Enquiry", "Via WhatsApp Button", "Franchise Opportunity", "Franchise Page CTA", "Franchise Page");
             const msg = `Hello Creatix! 👋\n\nI am interested in the *Computer Institute Franchise Opportunity*.\n\nKindly share more details about:\n• Franchise fees and investment\n• Territory availability\n• Support provided\n\nThank you!`;
-            window.open(`https://wa.me/918854800811?text=${encodeURIComponent(msg)}`, '_blank');
+            window.location.href = `thankyou.html?name=${encodeURIComponent("Franchise Enquiry")}&phone=${encodeURIComponent("Via WhatsApp Button")}&course=${encodeURIComponent("Franchise Opportunity")}&msg=${encodeURIComponent(msg)}`;
         }
 
         function franchiseCall() {
@@ -6117,7 +6501,7 @@
             a.click();
             setTimeout(() => {
                 const msg = `Hello Creatix! 👋\n\nPlease share the *Franchise Brochure PDF* with me.\n\nI am interested in learning more about the computer institute franchise opportunity.\n\nThank you!`;
-                window.open(`https://wa.me/918854800811?text=${encodeURIComponent(msg)}`, '_blank');
+                window.location.href = `thankyou.html?name=${encodeURIComponent("Brochure Download")}&phone=${encodeURIComponent("Via PDF Button")}&course=${encodeURIComponent("Franchise Brochure")}&msg=${encodeURIComponent(msg)}`;
             }, 1500);
         }
 
