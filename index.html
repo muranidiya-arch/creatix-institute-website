@@ -4048,6 +4048,209 @@
                 flex-direction: column
             }
         }
+
+        /* ========== ABOUT PAGE ========== */
+        #aboutPage {
+            display: none;
+            min-height: 100vh;
+            background: #fff;
+        }
+
+        .about-hero {
+            background: linear-gradient(135deg, #0A0A16 0%, #121226 50%, #080812 100%);
+            padding: 90px 5% 80px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(232, 35, 42, 0.12) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .about-hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 60px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(232, 35, 42, 0.1);
+            border: 1px solid rgba(232, 35, 42, 0.25);
+            color: #FF4A50;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .about-hero-content h1 {
+            font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .about-subtitle {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .about-cta-btn {
+            background: var(--red);
+            color: #fff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(232, 35, 42, 0.25);
+        }
+
+        .about-cta-btn:hover {
+            background: var(--red-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(232, 35, 42, 0.35);
+        }
+
+        .about-hero-img-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .about-img-box {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: #1A1A2E;
+        }
+
+        .about-img-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .about-story {
+            padding: 80px 5%;
+            background: #fff;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .story-left, .story-right {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 24px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--red);
+            border-radius: 2px;
+        }
+
+        .story-text p {
+            font-size: 0.98rem;
+            line-height: 1.75;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .story-text strong {
+            color: var(--text);
+        }
+
+        .story-accent-card {
+            background: #F8F9FC;
+            border-left: 4px solid var(--red);
+            padding: 30px;
+            border-radius: 0 16px 16px 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+            margin-bottom: 20px;
+        }
+
+        .story-accent-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 1.45;
+            color: var(--text);
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .story-accent-card p {
+            font-size: 0.94rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        @media (max-width: 992px) {
+            .about-hero-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .about-hero-img-wrap {
+                order: -1;
+            }
+
+            .about-img-box {
+                max-width: 280px;
+            }
+
+            .story-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
     </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZXLQYNF404"></script>
@@ -4128,6 +4331,7 @@
                 <li role="none"><a role="menuitem"
                         onclick="showMain();setTimeout(()=>document.getElementById('why-creatix').scrollIntoView({behavior:'smooth'}),100)">Why
                         Creatix</a></li>
+                <li role="none"><a role="menuitem" onclick="openAbout()">About Founder</a></li>
                 <li role="none"><a role="menuitem"
                         onclick="showMain();setTimeout(()=>document.getElementById('testimonials').scrollIntoView({behavior:'smooth'}),100)">Reviews</a>
                 </li>
@@ -4171,6 +4375,9 @@
         <a class="mn-link"
             onclick="showMain();document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow='';setTimeout(()=>document.getElementById('why-creatix').scrollIntoView({behavior:'smooth'}),100)"><i
                 class="fa-solid fa-trophy" aria-hidden="true"></i>Why Creatix</a>
+        <a class="mn-link"
+            onclick="openAbout();document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow=''"><i
+                class="fa-solid fa-user-tie" aria-hidden="true"></i>About Founder</a>
         <a class="mn-link"
             onclick="showMain();document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow='';setTimeout(()=>document.getElementById('testimonials').scrollIntoView({behavior:'smooth'}),100)"><i
                 class="fa-solid fa-star" aria-hidden="true"></i>Student Reviews</a>
@@ -4689,6 +4896,7 @@
                         <a
                             onclick="showMain();setTimeout(()=>document.getElementById('why-creatix').scrollIntoView({behavior:'smooth'}),100)"><i
                                 class="fa-solid fa-chevron-right" aria-hidden="true"></i>Why Creatix</a>
+                        <a onclick="openAbout()"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>About Founder</a>
                         <a
                             onclick="showMain();setTimeout(()=>document.getElementById('testimonials').scrollIntoView({behavior:'smooth'}),100)"><i
                                 class="fa-solid fa-chevron-right" aria-hidden="true"></i>Student Reviews</a>
@@ -5755,6 +5963,52 @@
 
     </div>
 
+    <!-- ==================== ABOUT PAGE ==================== -->
+    <div id="aboutPage" role="main" aria-label="About the Founder & Director">
+        <section class="about-hero">
+            <div class="about-hero-grid">
+                <div class="about-hero-content fl">
+                    <div class="fran-back" onclick="showMain()" role="link" tabindex="0" aria-label="Back to home" style="margin-bottom:20px; max-width: 150px;"><i
+                            class="fa-solid fa-arrow-left" aria-hidden="true"></i>Back to Home</div>
+                    <br>
+                    <span class="about-tag"><i class="fa-solid fa-user-tie" aria-hidden="true"></i> Founder & Director</span>
+                    <h1>Tanu Gulwani</h1>
+                    <p class="about-subtitle">Founder & Director, Creatix Institute (Empowering 2500+ students with AI-powered digital skills)</p>
+                    <button class="about-cta-btn" onclick="scrollToForm()" aria-label="Book free demo class">Book Free Demo Class</button>
+                </div>
+                <div class="about-hero-img-wrap fr">
+                    <div class="about-img-box">
+                        <img src="director_portrait.png" alt="Tanu Gulwani – Founder & Director of Creatix Institute Jaipur">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-story">
+            <div class="story-grid">
+                <div class="story-left fu">
+                    <h2 class="section-title">My Story & Journey</h2>
+                    <div class="story-text">
+                        <p>For over 10 years, I worked in the education and training industry — as a Career Counselor and later as a Branch Manager. During this time, I had a front-row view of how the system was failing students.</p>
+                        <p>I saw it all: inconsistent batch timings that clashed with students’ schedules, faculty who weren’t reviewed or held accountable, placement promises that were never kept, certifications that held little real value, courses that dragged on for months longer than promised, outdated content that had no relevance to what the industry actually needed, and management decisions made without ever asking — what does the student actually need?</p>
+                        <p>I sat across from hundreds of students who came in full of hope and walked out frustrated, confused, or worse — set back in their careers because the institute they trusted didn’t deliver.</p>
+                    </div>
+                </div>
+                <div class="story-right fu">
+                    <div class="story-accent-card">
+                        <h3>"I knew something had to change. So I decided to build it myself."</h3>
+                        <p>With a B.Com and MBA background, and a decade of hands-on experience in counseling and operations, I started Creatix - an institute designed from the ground up to fix every problem I had personally witnessed.</p>
+                    </div>
+                    <div class="story-text" style="margin-top: 24px;">
+                        <p>Flexible batch timings that work around students’ lives. Faculty who are accountable and reviewed regularly. Real placement support backed by industry partnerships. Certifications that actually mean something. Courses that stay updated with the latest tools — especially AI — because the industry doesn’t wait, and neither should our curriculum.</p>
+                        <p>Our journey began online in <strong>March 2021</strong>, where we built our foundation by training students remotely and understanding what truly worked. On <strong>4th April 2024</strong>, we took the leap and opened our first offline branch in Mansarovar - bringing everything we’d learned into a real, physical space built for students. Soon after, we expanded to our second branch in Pratap Nagar, growing our reach across Jaipur.</p>
+                        <p>Every decision at Creatix — from course design to faculty selection to placement drives - comes from one place: my own experience of what was broken, and my commitment to never let our students face the same.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <!-- ==================== THANK YOU PAGE ==================== -->
     <div id="thankYouPage" role="main" aria-label="Thank you for your enquiry" style="display: none;">
         <div class="ty-card fu vis">
@@ -6356,6 +6610,7 @@
             document.getElementById('mainSite').style.display = 'block';
             document.getElementById('coursePage').style.display = 'none';
             document.getElementById('franchisePage').style.display = 'none';
+            document.getElementById('aboutPage').style.display = 'none';
             window.scrollTo({ top: 0, behavior: 'smooth' });
             if (!skipHash) {
                 history.pushState("", document.title, window.location.pathname + window.location.search);
@@ -6367,12 +6622,32 @@
             document.getElementById('mainSite').style.display = 'none';
             document.getElementById('coursePage').style.display = 'none';
             document.getElementById('franchisePage').style.display = 'block';
+            document.getElementById('aboutPage').style.display = 'none';
             window.scrollTo({ top: 0 });
             if (!skipHash) {
                 window.location.hash = 'franchise';
             }
             setTimeout(() => {
                 document.querySelectorAll('#franchisePage .fu').forEach(el => {
+                    const r = el.getBoundingClientRect();
+                    if (r.top < window.innerHeight + 100) el.classList.add('vis');
+                });
+                observe();
+            }, 100);
+        }
+
+        function openAbout(skipHash = false) {
+            document.title = 'About the Founder & Director | Creatix Institute Jaipur';
+            document.getElementById('mainSite').style.display = 'none';
+            document.getElementById('coursePage').style.display = 'none';
+            document.getElementById('franchisePage').style.display = 'none';
+            document.getElementById('aboutPage').style.display = 'block';
+            window.scrollTo({ top: 0 });
+            if (!skipHash) {
+                window.location.hash = 'about';
+            }
+            setTimeout(() => {
+                document.querySelectorAll('#aboutPage .fu').forEach(el => {
                     const r = el.getBoundingClientRect();
                     if (r.top < window.innerHeight + 100) el.classList.add('vis');
                 });
@@ -6415,6 +6690,7 @@
             document.getElementById('cpTestiRole').textContent = cd.testi.role || cd.testi.r;
             document.getElementById('mainSite').style.display = 'none';
             document.getElementById('franchisePage').style.display = 'none';
+            document.getElementById('aboutPage').style.display = 'none';
             document.getElementById('coursePage').style.display = 'block';
             window.scrollTo({ top: 0 });
         }
@@ -6439,6 +6715,8 @@
             const hash = window.location.hash.slice(1);
             if (hash === 'franchise') {
                 openFranchise(true);
+            } else if (hash === 'about') {
+                openAbout(true);
             } else if (hash.startsWith('course-')) {
                 const slug = hash.replace('course-', '');
                 const course = COURSES.find(c => c.n.toLowerCase().replace(/\s+/g, '-') === slug);
