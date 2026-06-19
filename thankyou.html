@@ -266,21 +266,11 @@
             <i class="fa-solid fa-check"></i>
         </div>
         <h1>Submission Successful!</h1>
-        <p>Thank you for choosing <strong>Creatix Institute Jaipur</strong>. Your lead information has been securely received. We are now transferring you to WhatsApp to start your counseling session immediately.</p>
-        
-        <div class="redirect-box">
-            <div class="redirect-text">
-                <i class="fa-solid fa-circle-notch fa-spin"></i>
-                <span>Connecting to WhatsApp in <span id="tyCountdown">5</span> seconds...</span>
-            </div>
-            <div class="progress-bar">
-                <div id="tyProgressFill" class="progress-fill"></div>
-            </div>
-        </div>
+        <p>Thank you for choosing <strong>Creatix Institute Jaipur</strong>. Your inquiry has been securely received. Please click the button below to send your details directly on WhatsApp and start your counseling session immediately.</p>
 
         <div class="btn-group">
             <a id="tyWaBtn" href="#" class="btn btn-whatsapp">
-                <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp Now
+                <i class="fa-brands fa-whatsapp"></i> Send Details on WhatsApp
             </a>
             <a href="index.html" class="btn btn-home">
                 <i class="fa-solid fa-arrow-left"></i> Back to Homepage
@@ -318,31 +308,6 @@
                 status: 'Success'
             });
         }
-
-        // Countdown & Smooth Progress animation
-        const countdownEl = document.getElementById('tyCountdown');
-        const fillEl = document.getElementById('tyProgressFill');
-        const duration = 5000; // 5 seconds
-        const startTime = Date.now();
-
-        function updateProgress() {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            if (fillEl) fillEl.style.width = `${progress * 100}%`;
-            if (countdownEl) {
-                const remaining = Math.ceil((duration - elapsed) / 1000);
-                countdownEl.textContent = Math.max(0, remaining);
-            }
-            
-            if (elapsed < duration) {
-                requestAnimationFrame(updateProgress);
-            } else {
-                window.location.href = waUrl;
-            }
-        }
-        
-        requestAnimationFrame(updateProgress);
     </script>
 </body>
 </html>
