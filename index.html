@@ -4170,7 +4170,8 @@
             margin: 0 auto;
         }
 
-        .story-left, .story-right {
+        .story-left,
+        .story-right {
             display: flex;
             flex-direction: column;
         }
@@ -4249,6 +4250,542 @@
             .story-grid {
                 grid-template-columns: 1fr;
                 gap: 40px;
+            }
+        }
+
+        /* ========== NEW SUBMIT BUTTON STYLE ========== */
+        .btn-submit {
+            width: 100%;
+            background: var(--red);
+            color: #fff;
+            padding: 13px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: .93rem;
+            border: none;
+            cursor: pointer;
+            transition: all .25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 4px
+        }
+
+        .btn-submit:hover {
+            background: var(--red-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(232, 35, 42, .35)
+        }
+
+        /* ========== VISION & MISSION ========== */
+        .about-vision-mission {
+            padding: 80px 5%;
+            background: #F8F9FC;
+        }
+
+        .vm-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .vm-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vm-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .vm-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+        .vm-card.vision::before {
+            background: linear-gradient(90deg, #3B82F6, #6366F1);
+        }
+
+        .vm-card.mission::before {
+            background: linear-gradient(90deg, var(--red), var(--orange));
+        }
+
+        .vm-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        .vm-card.vision .vm-icon {
+            background: #EFF6FF;
+            color: #3B82F6;
+        }
+
+        .vm-card.mission .vm-icon {
+            background: #FFF1F2;
+            color: var(--red);
+        }
+
+        .vm-card h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .vm-card p {
+            font-size: 0.98rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        /* ========== MILESTONES & ACHIEVEMENTS ========== */
+        .about-milestones {
+            padding: 80px 5%;
+            background: #fff;
+        }
+
+        .milestones-title-wrap {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .milestones-title-wrap h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .milestones-title-wrap p {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .milestones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .milestone-card {
+            background: #F8F9FC;
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 30px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .milestone-card:hover {
+            background: #fff;
+            border-color: var(--red);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .milestone-ico {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+            background: #FFF1F2;
+            color: var(--red);
+        }
+
+        .milestone-card:nth-child(even) .milestone-ico {
+            background: #EFF6FF;
+            color: #2563EB;
+        }
+
+        .milestone-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .milestone-desc {
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        /* ========== CREATIX INNOVATION AGENCY ========== */
+        .about-agency {
+            padding: 80px 5%;
+            background: linear-gradient(135deg, #0A0A16 0%, #121226 100%);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-agency::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 10% 80%, rgba(37, 211, 102, 0.08) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .agency-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .agency-content h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .agency-content h2 span {
+            color: var(--red);
+        }
+
+        .agency-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: #10B981;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .agency-content p {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 24px;
+        }
+
+        .agency-highlight-box {
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 4px solid var(--red);
+            padding: 24px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 30px;
+        }
+
+        .agency-highlight-box p {
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .agency-btn {
+            background: #fff;
+            color: var(--text);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .agency-btn:hover {
+            background: var(--red);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(232, 35, 42, 0.25);
+        }
+
+        .agency-right-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px 30px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .agency-right-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .agency-right-card p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 24px;
+        }
+
+        /* ========== FOUNDER MESSAGE ========== */
+        .about-message {
+            padding: 90px 5%;
+            background: #F8F9FC;
+            position: relative;
+        }
+
+        .message-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .message-inner::before {
+            content: '\201C';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 8rem;
+            color: rgba(232, 35, 42, 0.06);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .message-title {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .message-title h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .message-title p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .message-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        .message-text p {
+            margin-bottom: 20px;
+        }
+
+        .message-author {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-light);
+            padding-top: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .author-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--red);
+        }
+
+        .author-meta h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .author-meta p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== CONNECT WITH FOUNDER ========== */
+        .about-connect {
+            padding: 80px 5%;
+            background: #fff;
+        }
+
+        .connect-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .connect-left h2,
+        .connect-right h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .connect-left h2::after,
+        .connect-right h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: var(--red);
+            border-radius: 2px;
+        }
+
+        .connect-left p,
+        .connect-right p {
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .social-links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .social-link-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            background: #F8F9FC;
+            border: 1px solid var(--border-light);
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .social-link-item:hover {
+            background: #fff;
+            border-color: var(--red);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .social-link-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .social-link-icon.ig {
+            background: linear-gradient(45deg, #F09433 0%, #E6683C 25%, #DC2743 50%, #CC2366 75%, #BC1888 100%);
+        }
+
+        .social-link-icon.wa {
+            background: #25D366;
+        }
+
+        .social-link-details h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .social-link-details p {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 992px) {
+
+            .vm-grid,
+            .connect-grid,
+            .agency-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .about-agency {
+                text-align: center;
+            }
+
+            .agency-content h2,
+            .milestones-title-wrap h2,
+            .message-title h2,
+            .connect-left h2,
+            .connect-right h2 {
+                font-size: 1.8rem;
+            }
+
+            .agency-inner {
+                text-align: left;
+            }
+
+            .message-inner {
+                padding: 30px 24px;
             }
         }
     </style>
@@ -4483,9 +5020,9 @@
                                 <option>Photography</option>
                             </select>
                         </div>
-                        <button class="btn-wa" onclick="submitForm()" aria-label="Apply now via WhatsApp"><i
-                                class="fa-brands fa-whatsapp" style="font-size:1.1rem" aria-hidden="true"></i>Apply Now
-                            on WhatsApp</button>
+                        <button class="btn-submit" onclick="submitForm()" aria-label="Send message"><i
+                                class="fa-solid fa-paper-plane" style="font-size:1.1rem" aria-hidden="true"></i>Send
+                            Message</button>
                         <p class="form-note"><i class="fa-solid fa-lock" style="color:#10B981;font-size:.68rem"
                                 aria-hidden="true"></i>100% Secure. No spam, ever.</p>
                     </div>
@@ -4896,7 +5433,8 @@
                         <a
                             onclick="showMain();setTimeout(()=>document.getElementById('why-creatix').scrollIntoView({behavior:'smooth'}),100)"><i
                                 class="fa-solid fa-chevron-right" aria-hidden="true"></i>Why Creatix</a>
-                        <a onclick="openAbout()"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>About Founder</a>
+                        <a onclick="openAbout()"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>About
+                            Founder</a>
                         <a
                             onclick="showMain();setTimeout(()=>document.getElementById('testimonials').scrollIntoView({behavior:'smooth'}),100)"><i
                                 class="fa-solid fa-chevron-right" aria-hidden="true"></i>Student Reviews</a>
@@ -5344,9 +5882,9 @@
                                 placeholder="Enter your name" autocomplete="name" aria-required="true"></div>
                         <div class="ff"><label for="cpPhone">Phone Number *</label><input type="tel" id="cpPhone"
                                 placeholder="+91 XXXXX XXXXX" autocomplete="tel" aria-required="true"></div>
-                        <button class="btn-wa" onclick="cpEnrollForm()" aria-label="Apply now via WhatsApp"><i
-                                class="fa-brands fa-whatsapp" style="font-size:1.1rem" aria-hidden="true"></i>Apply Now
-                            on WhatsApp</button>
+                        <button class="btn-submit" onclick="cpEnrollForm()" aria-label="Send message"><i
+                                class="fa-solid fa-paper-plane" style="font-size:1.1rem" aria-hidden="true"></i>Send
+                            Message</button>
                         <p class="form-note"><i class="fa-solid fa-lock" style="color:#10B981;font-size:.68rem"
                                 aria-hidden="true"></i>100% Secure. No spam, ever.</p>
                     </div>
@@ -5968,17 +6506,21 @@
         <section class="about-hero">
             <div class="about-hero-grid">
                 <div class="about-hero-content fl">
-                    <div class="fran-back" onclick="showMain()" role="link" tabindex="0" aria-label="Back to home" style="margin-bottom:20px; max-width: 150px;"><i
-                            class="fa-solid fa-arrow-left" aria-hidden="true"></i>Back to Home</div>
+                    <div class="fran-back" onclick="showMain()" role="link" tabindex="0" aria-label="Back to home"
+                        style="margin-bottom:20px; max-width: 150px;"><i class="fa-solid fa-arrow-left"
+                            aria-hidden="true"></i>Back to Home</div>
                     <br>
-                    <span class="about-tag"><i class="fa-solid fa-user-tie" aria-hidden="true"></i> Founder & Director</span>
+                    <span class="about-tag"><i class="fa-solid fa-user-tie" aria-hidden="true"></i> Founder &
+                        Director</span>
                     <h1>Tanu Gulwani</h1>
-                    <p class="about-subtitle">Founder & Director, Creatix Institute (Empowering 2500+ students with AI-powered digital skills)</p>
-                    <button class="about-cta-btn" onclick="scrollToForm()" aria-label="Book free demo class">Book Free Demo Class</button>
+                    <p class="about-subtitle">Founder & Director, Creatix Institute (Empowering 2500+ students with
+                        AI-powered digital skills)</p>
+                    <button class="about-cta-btn" onclick="scrollToForm()" aria-label="Book free demo class">Book Free
+                        Demo Class</button>
                 </div>
                 <div class="about-hero-img-wrap fr">
                     <div class="about-img-box">
-                        <img src="director_portrait.png" alt="Tanu Gulwani – Founder & Director of Creatix Institute Jaipur">
+                        <img src="1000244527.jpg" alt="Tanu Gulwani – Founder & Director of Creatix Institute Jaipur">
                     </div>
                 </div>
             </div>
@@ -5989,20 +6531,228 @@
                 <div class="story-left fu">
                     <h2 class="section-title">My Story & Journey</h2>
                     <div class="story-text">
-                        <p>For over 10 years, I worked in the education and training industry — as a Career Counselor and later as a Branch Manager. During this time, I had a front-row view of how the system was failing students.</p>
-                        <p>I saw it all: inconsistent batch timings that clashed with students’ schedules, faculty who weren’t reviewed or held accountable, placement promises that were never kept, certifications that held little real value, courses that dragged on for months longer than promised, outdated content that had no relevance to what the industry actually needed, and management decisions made without ever asking — what does the student actually need?</p>
-                        <p>I sat across from hundreds of students who came in full of hope and walked out frustrated, confused, or worse — set back in their careers because the institute they trusted didn’t deliver.</p>
+                        <p>For over 10 years, I worked in the education and training industry — as a Career Counselor
+                            and later as a Branch Manager. During this time, I had a front-row view of how the system
+                            was failing students.</p>
+                        <p>I saw it all: inconsistent batch timings that clashed with students’ schedules, faculty who
+                            weren’t reviewed or held accountable, placement promises that were never kept,
+                            certifications that held little real value, courses that dragged on for months longer than
+                            promised, outdated content that had no relevance to what the industry actually needed, and
+                            management decisions made without ever asking — what does the student actually need?</p>
+                        <p>I sat across from hundreds of students who came in full of hope and walked out frustrated,
+                            confused, or worse — set back in their careers because the institute they trusted didn’t
+                            deliver.</p>
                     </div>
                 </div>
                 <div class="story-right fu">
                     <div class="story-accent-card">
                         <h3>"I knew something had to change. So I decided to build it myself."</h3>
-                        <p>With a B.Com and MBA background, and a decade of hands-on experience in counseling and operations, I started Creatix - an institute designed from the ground up to fix every problem I had personally witnessed.</p>
+                        <p>With a B.Com and MBA background, and a decade of hands-on experience in counseling and
+                            operations, I started Creatix - an institute designed from the ground up to fix every
+                            problem I had personally witnessed.</p>
                     </div>
                     <div class="story-text" style="margin-top: 24px;">
-                        <p>Flexible batch timings that work around students’ lives. Faculty who are accountable and reviewed regularly. Real placement support backed by industry partnerships. Certifications that actually mean something. Courses that stay updated with the latest tools — especially AI — because the industry doesn’t wait, and neither should our curriculum.</p>
-                        <p>Our journey began online in <strong>March 2021</strong>, where we built our foundation by training students remotely and understanding what truly worked. On <strong>4th April 2024</strong>, we took the leap and opened our first offline branch in Mansarovar - bringing everything we’d learned into a real, physical space built for students. Soon after, we expanded to our second branch in Pratap Nagar, growing our reach across Jaipur.</p>
-                        <p>Every decision at Creatix — from course design to faculty selection to placement drives - comes from one place: my own experience of what was broken, and my commitment to never let our students face the same.</p>
+                        <p>Flexible batch timings that work around students’ lives. Faculty who are accountable and
+                            reviewed regularly. Real placement support backed by industry partnerships. Certifications
+                            that actually mean something. Courses that stay updated with the latest tools — especially
+                            AI — because the industry doesn’t wait, and neither should our curriculum.</p>
+                        <p>Our journey began online in <strong>March 2021</strong>, where we built our foundation by
+                            training students remotely and understanding what truly worked. On <strong>4th April
+                                2024</strong>, we took the leap and opened our first offline branch in Mansarovar -
+                            bringing everything we’d learned into a real, physical space built for students. Soon after,
+                            we expanded to our second branch in Pratap Nagar, growing our reach across Jaipur.</p>
+                        <p>Every decision at Creatix — from course design to faculty selection to placement drives -
+                            comes from one place: my own experience of what was broken, and my commitment to never let
+                            our students face the same.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VISION & MISSION ==================== -->
+        <section class="about-vision-mission">
+            <div class="vm-grid">
+                <div class="vm-card vision fu">
+                    <div class="vm-icon" aria-hidden="true">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>We believe 2026 isn’t just another year of technology - it’s the year AI stops being a “buzzword”
+                        and becomes the baseline skill every professional must have. Our vision is to make Jaipur’s
+                        youth AI-ready, not just computer-literate - to ensure that every student who walks through our
+                        doors walks out equipped to thrive in an AI-driven job market, not be replaced by it.</p>
+                </div>
+                <div class="vm-card mission fu" style="transition-delay: 0.1s;">
+                    <div class="vm-icon" aria-hidden="true">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To deliver practical, AI-integrated education across every course we teach - because theory
+                        without application means nothing in today’s industry. We are committed to making every student
+                        job-ready, not just certificate-ready, through real tools, real projects, and real industry
+                        exposure from day one.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== BEYOND THE CLASSROOM ==================== -->
+        <section class="about-agency">
+            <div class="agency-inner">
+                <div class="agency-content fu">
+                    <span class="agency-tag"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Unique USP</span>
+                    <h2>Beyond the Classroom – <span>Creatix Innovation</span></h2>
+                    <p>We didn’t stop at training. We built <strong>Creatix Innovation</strong>, our in-house digital
+                        marketing and creative agency – so our students never have to struggle to find a paid
+                        internship.</p>
+                    <p>After 4-5 months of training, students step directly into live, in-house industry projects
+                        through Creatix Innovation – working on real client campaigns, real deliverables, and real
+                        deadlines. No more cold-emailing companies for unpaid internships, no more “experience required”
+                        rejections. We create the experience ourselves, in-house, for our own students.</p>
+                    <div class="agency-highlight-box">
+                        <p><strong>This is what makes Creatix different:</strong> we don’t just teach skills and wish
+                            you luck. We build the bridge from classroom to career – and walk students across it
+                            ourselves.</p>
+                    </div>
+                    <a href="https://www.creatixinnovation.com" target="_blank" rel="noopener" class="agency-btn"
+                        aria-label="Visit Creatix Innovation website">
+                        Visit Creatix Innovation <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="agency-right-card fu" style="transition-delay: 0.15s;">
+                    <i class="fa-solid fa-gears" style="font-size: 3rem; color: #10B981; margin-bottom: 24px;"
+                        aria-hidden="true"></i>
+                    <h3>Guaranteed Paid Internship Pathway</h3>
+                    <p>Our in-house digital marketing & creative agency gives Creatix students real client projects and
+                        guaranteed paid internships after 4-5 months of training. No more struggling for unpaid
+                        internships; we create the opportunity ourselves.</p>
+                    <span
+                        style="font-size: 0.82rem; color: rgba(255,255,255,0.4); display: block; margin-top: 10px;">Managed
+                        by Tanu Gulwani<br>Founder & Director, Creatix Institute</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ACHIEVEMENTS & MILESTONES ==================== -->
+        <section class="about-milestones">
+            <div class="milestones-title-wrap fu">
+                <h2>Our Achievements & Milestones</h2>
+                <p>Growing every day to empower the future of Jaipur's digital workforce.</p>
+            </div>
+            <div class="milestones-grid">
+                <div class="milestone-card fu">
+                    <div class="milestone-ico" aria-hidden="true"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div class="milestone-num">2500+</div>
+                    <div class="milestone-desc">Students Trained across online and offline batches since 2021</div>
+                </div>
+                <div class="milestone-card fu" style="transition-delay: 0.05s;">
+                    <div class="milestone-ico" aria-hidden="true"><i class="fa-solid fa-handshake-angle"></i></div>
+                    <div class="milestone-num">95%</div>
+                    <div class="milestone-desc">Placement Rate – backed by 200+ hiring partners across the industry
+                    </div>
+                </div>
+                <div class="milestone-card fu" style="transition-delay: 0.1s;">
+                    <div class="milestone-ico" aria-hidden="true"><i class="fa-solid fa-building-user"></i></div>
+                    <div class="milestone-num">2 Branches</div>
+                    <div class="milestone-desc">In Jaipur – Mansarovar (Established 2024) & Pratap Nagar</div>
+                </div>
+                <div class="milestone-card fu" style="transition-delay: 0.15s;">
+                    <div class="milestone-ico" aria-hidden="true"><i class="fa-solid fa-award"></i></div>
+                    <div class="milestone-num">Govt. Recognized</div>
+                    <div class="milestone-desc">NSDC, NIELIT, NASSCOM Affiliated certifications for global validity
+                    </div>
+                </div>
+                <div class="milestone-card fu" style="transition-delay: 0.2s;">
+                    <div class="milestone-ico" aria-hidden="true"><i class="fa-solid fa-laptop-code"></i></div>
+                    <div class="milestone-num">In-House Agency</div>
+                    <div class="milestone-desc">Creatix Innovation – guaranteed paid internship pathway for every
+                        student</div>
+                </div>
+                <div class="milestone-card fu" style="transition-delay: 0.25s;">
+                    <div class="milestone-ico" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></div>
+                    <div class="milestone-num">5+ Years</div>
+                    <div class="milestone-desc">Of industry experience leading into building Creatix (counselor & branch
+                        manager background)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PERSONAL MESSAGE ==================== -->
+        <section class="about-message">
+            <div class="message-inner fu">
+                <div class="message-title">
+                    <h2>A Message from Tanu Gulwani</h2>
+                    <p>Founder & Director, Creatix Institute</p>
+                </div>
+                <div class="message-text">
+                    <p>“Main jaanti hoon ki har student ka safar alag hota hai – kuch confused hote hain career choice
+                        lekar, kuch dar ke saath aate hain ki ‘kya main yeh kar paunga?’, aur kuch sirf ek chance
+                        dhoondh rahe hote hain khud ko prove karne ka.</p>
+                    <p>Maine apni 10 saal ki journey mein yeh seekha hai – sahi guidance, sahi support, aur ek genuine
+                        chance milne se kuch bhi possible hai. Isliye Creatix ka har decision – chahe woh course ho,
+                        faculty ho, ya placement – bas ek hi sawal ke around bana hai: ‘Isse student ko kya fayda hoga?’
+                    </p>
+                    <p>Tumhara confidence, tumhari mehnat, aur Creatix ka support – yeh combination tumhe kahin bhi le
+                        ja sakta hai. Bas shuru karo. Hum saath hain.”</p>
+                </div>
+                <div class="message-author">
+                    <div class="author-info">
+                        <img src="1000244527.jpg" alt="Tanu Gulwani" class="author-img">
+                        <div class="author-meta">
+                            <h4>Tanu Gulwani</h4>
+                            <p>Founder & Director, Creatix Institute & Creatix Innovation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== CONNECT & SOCIALS ==================== -->
+        <section class="about-connect">
+            <div class="connect-grid">
+                <div class="connect-left fu">
+                    <h2>Media Presence & Social Proof</h2>
+                    <p>Stay connected with me and follow the daily journey, behind-the-scenes moments, motivational
+                        stories, and student success features:</p>
+                    <div class="social-links-list">
+                        <a href="https://www.instagram.com/tannu.vision" target="_blank" rel="noopener"
+                            class="social-link-item" aria-label="Follow Tanu Gulwani on Instagram">
+                            <div class="social-link-icon ig"><i class="fa-brands fa-instagram"></i></div>
+                            <div class="social-link-details">
+                                <h4>@tannu.vision</h4>
+                                <p>Personal Instagram - Behind-the-scenes, student stories & motivation</p>
+                            </div>
+                        </a>
+                        <a href="https://www.instagram.com/creatix_institute" target="_blank" rel="noopener"
+                            class="social-link-item" aria-label="Follow Creatix Institute on Instagram">
+                            <div class="social-link-icon ig"><i class="fa-brands fa-instagram"></i></div>
+                            <div class="social-link-details">
+                                <h4>@creatix_institute</h4>
+                                <p>Official Institute Instagram - Student reviews, announcements & events</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="connect-right fu" style="transition-delay: 0.15s;">
+                    <h2>Connect With Me</h2>
+                    <p>Have questions about courses, want to discuss admissions, partnership ideas, or computer
+                        institute franchise opportunities? Reach out directly:</p>
+                    <div class="social-links-list">
+                        <a href="https://wa.me/918854800811" target="_blank" rel="noopener" class="social-link-item"
+                            aria-label="WhatsApp Tanu Gulwani directly">
+                            <div class="social-link-icon wa"><i class="fa-brands fa-whatsapp"></i></div>
+                            <div class="social-link-details">
+                                <h4>WhatsApp Me Directly</h4>
+                                <p>+91 88548 00811 - Get instant answers and assistance</p>
+                            </div>
+                        </a>
+                        <a href="https://www.instagram.com/tannu.vision" target="_blank" rel="noopener"
+                            class="social-link-item" aria-label="Connect on Instagram">
+                            <div class="social-link-icon ig"><i class="fa-brands fa-instagram"></i></div>
+                            <div class="social-link-details">
+                                <h4>Instagram DM</h4>
+                                <p>@tannu.vision - Connect, chat and stay inspired</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -6016,18 +6766,13 @@
                 <i class="fa-solid fa-check"></i>
             </div>
             <h1>Enquiry Received Successfully!</h1>
-            <p>Thank you for connecting with <strong>Creatix Institute Jaipur</strong>. Your query has been logged in our system. You are being redirected to chat with our expert on WhatsApp to get instant details.</p>
-            
-            <div class="ty-redirect-box">
-                <div style="font-size: .84rem; font-weight: 700; color: rgba(255,255,255,0.9)">Redirecting to WhatsApp in <span id="tyCountdown">5</span> seconds...</div>
-                <div class="ty-progress-bar">
-                    <div id="tyProgressFill" class="ty-progress-fill"></div>
-                </div>
-            </div>
+            <p>Thank you for connecting with <strong>Creatix Institute Jaipur</strong>. Your query has been logged in
+                our system. Please click the button below to send your details directly on WhatsApp and start your
+                counseling session immediately.</p>
 
             <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
                 <a id="tyWaBtn" href="#" target="_blank" class="btn-ty-wa">
-                    <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp Now
+                    <i class="fa-brands fa-whatsapp"></i> Send Details on WhatsApp
                 </a>
                 <a href="#" onclick="showMain()" class="btn-ty-home">
                     <i class="fa-solid fa-house"></i> Back to Homepage
@@ -6076,30 +6821,30 @@
         ];
 
         const COURSE_DETAILS = {
-            "B.Voc": { 
-                desc: "A 3-year UGC-approved vocational degree program in Jaipur integrating digital skills — graphic design, video editing, web development, and digital marketing — with academic qualifications.", 
-                duration: "3 Years", 
-                level: "12th Pass (Any Stream)", 
-                batch: "Morning / Evening", 
-                cert: "UGC-Approved B.Voc Degree", 
+            "B.Voc": {
+                desc: "A 3-year UGC-approved vocational degree program in Jaipur integrating digital skills — graphic design, video editing, web development, and digital marketing — with academic qualifications.",
+                duration: "3 Years",
+                level: "12th Pass (Any Stream)",
+                batch: "Morning / Evening",
+                cert: "UGC-Approved B.Voc Degree",
                 highlights: [
-                    { i: "fa-solid fa-university", c: "#7C3AED", bg: "#F5F0FF", t: "UGC-Approved Degree", d: "Nationally recognized B.Voc qualification" }, 
-                    { i: "fa-solid fa-laptop-code", c: "#0369A1", bg: "#EFF6FF", t: "6 Skill Modules", d: "Design, Video, Web Dev, Marketing & more" }, 
-                    { i: "fa-solid fa-briefcase", c: "#065F46", bg: "#ECFDF5", t: "Guaranteed Internship", d: "6-month live internship with real clients" }, 
+                    { i: "fa-solid fa-university", c: "#7C3AED", bg: "#F5F0FF", t: "UGC-Approved Degree", d: "Nationally recognized B.Voc qualification" },
+                    { i: "fa-solid fa-laptop-code", c: "#0369A1", bg: "#EFF6FF", t: "6 Skill Modules", d: "Design, Video, Web Dev, Marketing & more" },
+                    { i: "fa-solid fa-briefcase", c: "#065F46", bg: "#ECFDF5", t: "Guaranteed Internship", d: "6-month live internship with real clients" },
                     { i: "fa-solid fa-certificate", c: "#B45309", bg: "#FFFBEB", t: "Industry Certification", d: "Adobe, Google & Meta certifications included" }
-                ], 
+                ],
                 curriculum: [
-                    { m: "Semester 1 – Design & Creative Foundations", topics: ["Introduction to Digital Art", "Fundamentals of Photography", "Drawing & Composition", "Computer & Internet Basics", "Communication Skills"] }, 
-                    { m: "Semester 2 – Graphic & UI Design", topics: ["Adobe Photoshop Advanced", "Adobe Illustrator", "Brand Identity & Logo Design", "Print & Packaging Design", "AI Design Tools (Midjourney, Firefly)"] }, 
-                    { m: "Semester 3 – Audio-Video Production", topics: ["Adobe Premiere Pro Essentials", "Audio Editing & Noise Removal", "Color Grading & Sound Synch", "Reel & YouTube Video Editing", "AI Video tools"] }, 
-                    { m: "Semester 4 – Motion Graphics & 3D Basics", topics: ["Adobe After Effects", "Motion Graphics & Kinetic Typography", "Cinema 4D basics", "Character Animation", "VFX Basics"] }, 
-                    { m: "Semester 5 – Web Development & Coding", topics: ["HTML5, CSS3 & JavaScript", "WordPress & Shopify development", "Git & GitHub", "API Integration", "AI-assisted coding"] }, 
+                    { m: "Semester 1 – Design & Creative Foundations", topics: ["Introduction to Digital Art", "Fundamentals of Photography", "Drawing & Composition", "Computer & Internet Basics", "Communication Skills"] },
+                    { m: "Semester 2 – Graphic & UI Design", topics: ["Adobe Photoshop Advanced", "Adobe Illustrator", "Brand Identity & Logo Design", "Print & Packaging Design", "AI Design Tools (Midjourney, Firefly)"] },
+                    { m: "Semester 3 – Audio-Video Production", topics: ["Adobe Premiere Pro Essentials", "Audio Editing & Noise Removal", "Color Grading & Sound Synch", "Reel & YouTube Video Editing", "AI Video tools"] },
+                    { m: "Semester 4 – Motion Graphics & 3D Basics", topics: ["Adobe After Effects", "Motion Graphics & Kinetic Typography", "Cinema 4D basics", "Character Animation", "VFX Basics"] },
+                    { m: "Semester 5 – Web Development & Coding", topics: ["HTML5, CSS3 & JavaScript", "WordPress & Shopify development", "Git & GitHub", "API Integration", "AI-assisted coding"] },
                     { m: "Semester 6 – Digital Marketing & AI Applications", topics: ["Search Engine Optimization (SEO)", "Google Ads & Meta Ads", "Social Media Marketing", "ChatGPT & AI Marketing Tools", "Final Graduation Project"] }
-                ], 
-                tools: ["Adobe Photoshop", "Adobe Illustrator", "Premiere Pro", "After Effects", "Figma", "WordPress", "Canva Pro", "Midjourney", "ChatGPT", "Google Ads", "Meta Ads", "Capcut"], 
-                outcomes: ["Graphic Designer", "Video Editor", "Web Developer", "Digital Marketer", "Content Creator", "UI/UX Designer", "Social Media Manager", "Freelancer"], 
-                features: ["UGC-Approved B.Voc Degree", "Placement support with 200+ companies", "Live projects & real client work", "Adobe, Google & Meta certifications", "Expert trainers with 5+ years experience", "Flexible morning/evening batches", "Dedicated career counseling", "Alumni network of 2500+ professionals"], 
-                testi: { t: "The B.Voc program completely changed my career trajectory. I got placed as a Content Creator at a digital agency right after graduation!", n: "Riya Sharma", r: "Content Creator · Digital Agency", av: "RS", c: "#7C3AED" } 
+                ],
+                tools: ["Adobe Photoshop", "Adobe Illustrator", "Premiere Pro", "After Effects", "Figma", "WordPress", "Canva Pro", "Midjourney", "ChatGPT", "Google Ads", "Meta Ads", "Capcut"],
+                outcomes: ["Graphic Designer", "Video Editor", "Web Developer", "Digital Marketer", "Content Creator", "UI/UX Designer", "Social Media Manager", "Freelancer"],
+                features: ["UGC-Approved B.Voc Degree", "Placement support with 200+ companies", "Live projects & real client work", "Adobe, Google & Meta certifications", "Expert trainers with 5+ years experience", "Flexible morning/evening batches", "Dedicated career counseling", "Alumni network of 2500+ professionals"],
+                testi: { t: "The B.Voc program completely changed my career trajectory. I got placed as a Content Creator at a digital agency right after graduation!", n: "Riya Sharma", r: "Content Creator · Digital Agency", av: "RS", c: "#7C3AED" }
             },
             "Audio-Video Editing (3 Months)": {
                 desc: "Learn professional video & audio editing for YouTube, Reels, and corporate videos. Master Adobe Premiere Pro, Audition, and CapCut AI. Best short-term video editing course in Jaipur.",
@@ -6825,7 +7570,8 @@
     </script>
 
     <!-- Video Lightbox Modal -->
-    <div id="videoModal" class="video-modal" onclick="closeVideoModal()" role="dialog" aria-modal="true" aria-label="Student video review player">
+    <div id="videoModal" class="video-modal" onclick="closeVideoModal()" role="dialog" aria-modal="true"
+        aria-label="Student video review player">
         <div class="video-modal-content" onclick="event.stopPropagation()">
             <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Close player">&times;</button>
             <div id="videoModalBody" class="video-modal-body"></div>
