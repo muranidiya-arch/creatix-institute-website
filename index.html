@@ -7479,7 +7479,12 @@
         /* ========== LEAD SENDER ========== */
         const GAS_URL = "https://script.google.com/macros/s/AKfycbyMSTTn5fI3CBq6W3nNH874YhfdzmcLBsA64IK9Gn1MUBTcnwwuIPOTDkYZEy6Hi3pTJA/exec";
         function sendLeadEmail(name, phone, course, source, page) {
-            fetch(GAS_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, phone, course, source, page }), mode: "no-cors" }).catch(() => { });
+            fetch(GAS_URL, { 
+                method: "POST", 
+                mode: "no-cors", 
+                keepalive: true, 
+                body: JSON.stringify({ name, phone, course, source, page }) 
+            }).catch(() => { });
         }
 
         /* ========== FORMS ========== */
@@ -7556,7 +7561,81 @@
         /* ========== KEYBOARD SUPPORT ========== */
         document.addEventListener('keydown', e => {
             if (e.key === 'Enter' && (e.target.getAttribute('role') === 'button' || e.target.getAttribute('role') === 'link' || e.target.getAttribute('role') === 'menuitem')) { e.target.click(); }
-            if (e.key === 'Escape') { document.getElementById('mobileNav').classList.remove('open'); document.body.style.overflow = ''; }
+            if (e.key === 'Escape') { 
+                document.getElementById('mobileNav').classList.remove('open'); 
+                document.body.style.overflow = ''; 
+                closeLeadPopup();
+            }
+        });
+
+        /* ========== LEAD POPUP FUNCTIONS ========== */
+        function closeLeadPopup() {
+            const modal = document.getElementById('leadPopupModal');
+            if (modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+            sessionStorage.setItem('creatixPopupShown', 'true');
+        }
+
+        function submitPopupForm(e) {
+            e.preventDefault();
+            const nm = document.getElementById('pop-name').value.trim();
+            const ph = document.getElementById('pop-phone').value.trim();
+            if (!nm) { alert('Please enter your name'); return; }
+            if (!ph || ph.replace(/\D/g, '').length < 10) { alert('Please enter a valid phone number'); return; }
+            
+            const btn = document.querySelector('.lead-popup-submit-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = 'Sending... <i class="fa-solid fa-spinner fa-spin"></i>';
+            }
+
+            // Send lead via Apps Script
+            sendLeadEmail(nm, ph, "General Inquiry", "Popup Form", "popup page");
+            sessionStorage.setItem('creatixPopupShown', 'true');
+            
+            // Show success animation inside the modal instead of redirecting
+            setTimeout(() => {
+                const container = document.getElementById('leadPopupFormContainer');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="lead-popup-success">
+                            <div class="success-checkmark-wrap">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <h4>Thank You!</h4>
+                            <p>Your details have been submitted successfully. We will get back to you shortly.</p>
+                        </div>
+                    `;
+                }
+                
+                // Automatically close the modal after 2.5 seconds
+                setTimeout(() => {
+                    closeLeadPopup();
+                }, 2500);
+            }, 600);
+        }
+
+        // Show popup after 4 seconds if not already shown in this session
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!sessionStorage.getItem('creatixPopupShown')) {
+                setTimeout(() => {
+                    const modal = document.getElementById('leadPopupModal');
+                    if (modal) {
+                        modal.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    }
+                }, 4000);
+            }
+        });
+
+        // Close popup when clicking outside the content
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('leadPopupModal');
+            if (e.target === modal) {
+                closeLeadPopup();
+            }
         });
 
         /* ========== INIT ========== */
@@ -7568,6 +7647,235 @@
         }, 100);
         setTimeout(observe, 600);
     </script>
+
+    <!-- Lead Popup Modal -->
+    <style>
+        .lead-popup-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .lead-popup-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lead-popup-content {
+            background: #ffffff;
+            width: 90%;
+            max-width: 440px;
+            padding: 40px 32px 32px;
+            border-radius: 24px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .lead-popup-modal.show .lead-popup-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .lead-popup-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #6B7280;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .lead-popup-close:hover {
+            color: #E8232A;
+            transform: scale(1.15);
+        }
+
+        .lead-popup-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .lead-popup-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #FFF1F2;
+            color: #E8232A;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .lead-popup-header h3 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #1A1A2E;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .lead-popup-header p {
+            font-size: 0.88rem;
+            color: #6B7280;
+            line-height: 1.5;
+        }
+
+        .lead-popup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .lead-popup-input-group {
+            position: relative;
+        }
+
+        .lead-popup-input-group .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .lead-popup-input-group input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: #1A1A2E;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .lead-popup-input-group input::placeholder {
+            color: #9CA3AF;
+        }
+
+        .lead-popup-input-group input:focus {
+            border-color: #E8232A;
+            box-shadow: 0 0 0 4px rgba(232, 35, 42, 0.1);
+        }
+
+        .lead-popup-input-group input:focus + .input-icon {
+            color: #E8232A;
+        }
+
+        .lead-popup-submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #E8232A 0%, #C41E24 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 20px rgba(232, 35, 42, 0.25);
+        }
+
+        .lead-popup-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(232, 35, 42, 0.35);
+        }
+
+        .lead-popup-submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Success screen styles */
+        .lead-popup-success {
+            text-align: center;
+            padding: 20px 0;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .success-checkmark-wrap {
+            font-size: 54px;
+            color: #25D366;
+            margin-bottom: 16px;
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .lead-popup-success h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1A1A2E;
+            margin-bottom: 8px;
+        }
+
+        .lead-popup-success p {
+            font-size: 0.9rem;
+            color: #6B7280;
+            line-height: 1.5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+    </style>
+
+    <div id="leadPopupModal" class="lead-popup-modal" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+        <div class="lead-popup-content">
+            <button class="lead-popup-close" onclick="closeLeadPopup()" aria-label="Close popup">&times;</button>
+            <div class="lead-popup-header">
+                <div class="lead-popup-badge"><i class="fa-solid fa-graduation-cap"></i> Free Career Counseling</div>
+                <h3 id="popupTitle">Start Your AI-Powered IT Journey</h3>
+                <p>Enter your details and our expert counselors will call you back within 10 minutes!</p>
+            </div>
+            <div id="leadPopupFormContainer">
+                <form id="leadPopupForm" class="lead-popup-form" onsubmit="submitPopupForm(event)">
+                    <div class="lead-popup-input-group">
+                        <i class="fa-solid fa-user input-icon"></i>
+                        <input type="text" id="pop-name" placeholder="Enter Your Full Name" required>
+                    </div>
+                    <div class="lead-popup-input-group">
+                        <i class="fa-solid fa-phone input-icon"></i>
+                        <input type="tel" id="pop-phone" placeholder="Enter Your 10-Digit Phone Number" pattern="[0-9]{10}" maxlength="10" required>
+                    </div>
+                    <button type="submit" class="lead-popup-submit-btn">
+                        Send Message <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Video Lightbox Modal -->
     <div id="videoModal" class="video-modal" onclick="closeVideoModal()" role="dialog" aria-modal="true"
