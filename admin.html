@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creatix Admin Panel | Admin CMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --activity-bg: #f3f3f3;
+            --sidebar-bg: #fafafa;
+            --editor-bg: #ffffff;
+            --tab-bg: #ececec;
+            --tab-active-bg: #ffffff;
+            --status-bg: #4f46e5;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --success: #10b981;
+            --error: #ef4444;
+            --font-ui: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: var(--font-ui);
+            background-color: var(--editor-bg);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Outer Frame Wrapper */
+        .ide-container {
+            display: flex;
+            flex: 1;
+            width: 100vw;
+            height: calc(100vh - 22px);
+            overflow: hidden;
+        }
+
+        /* 1. Activity Bar (Narrow Left Column, 55px) */
+        .activity-bar {
+            width: 55px;
+            background-color: var(--activity-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+            gap: 1.5rem;
+            z-index: 10;
+        }
+
+        .activity-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .activity-btn:hover {
+            color: var(--text-main);
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .activity-btn.active {
+            color: var(--accent);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .activity-btn.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15%;
+            height: 70%;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* 2. Side Panel Container (Explorer/Settings/Git, 280px) */
+        .side-panel {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .side-panel-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 48px;
+        }
+
+        .side-panel-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .side-panel-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Explorer Tab Contents */
+        .explorer-section {
+            padding: 1rem;
+        }
+
+        .explorer-section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .file-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .file-item {
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.15s;
+            color: var(--text-main);
+        }
+
+        .file-item:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .file-item.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* File Upload Area */
+        .upload-zone {
+            border: 2px dashed rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
+            padding: 1.2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+            background: rgba(0,0,0,0.02);
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.03);
+        }
+
+        .upload-zone svg {
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-zone span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .upload-loading {
+            display: none;
+            font-size: 0.8rem;
+            color: var(--accent);
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Assets list */
+        .assets-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .asset-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .asset-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            background: #f3f4f6;
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .asset-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .asset-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .asset-size {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        .asset-actions {
+            display: flex;
+            gap: 2px;
+        }
+
+        .asset-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .asset-btn:hover {
+            color: var(--text-main);
+            background: rgba(0,0,0,0.05);
+        }
+
+        .asset-btn.delete:hover {
+            color: var(--error);
+        }
+
+        /* Settings View inside Side Panel */
+        .settings-section {
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .form-group input {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 0.7rem;
+            border-radius: 6px;
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            font-size: 0.85rem;
+            outline: none;
+            width: 100%;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-connect {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-connect:hover {
+            background: var(--accent-hover);
+        }
+
+        /* 3. Main Code Editor Area */
+        .editor-pane {
+            flex: 1;
+            background-color: var(--editor-bg);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Editor Tabs */
+        .tab-bar {
+            height: 35px;
+            background: var(--activity-bg);
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab {
+            height: 100%;
+            padding: 0 1.2rem;
+            background: var(--tab-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.15s;
+        }
+
+        .tab.active {
+            background: var(--tab-active-bg);
+            color: var(--text-main);
+            border-top: 2px solid var(--accent);
+        }
+
+        .tab-actions {
+            margin-left: auto;
+            padding-right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Editor Frame container */
+        .editor-frame {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        #editor-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Deploy Action Buttons inside IDE */
+        .publish-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.35rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+        }
+
+        .publish-btn:hover:not(:disabled) {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .publish-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 4. Bottom Status Bar (22px) */
+        .status-bar {
+            height: 22px;
+            background-color: var(--status-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            font-size: 0.75rem;
+            color: white;
+            font-weight: 500;
+            z-index: 100;
+        }
+
+        .status-left, .status-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .status-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Custom Toast System */
+        .toast-wrapper {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.8rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(150%);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--error);
+        }
+
+        /* File Upload Hidden Input */
+        #hiddenFileInput {
+            display: none;
+        }
+
+        /* Commit History Styles */
+        .commit-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.8rem;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: border-color 0.2s;
+        }
+
+        .commit-card:hover {
+            border-color: var(--accent);
+        }
+
+        .commit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .commit-author {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .commit-time {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        .commit-msg {
+            font-size: 0.8rem;
+            color: var(--text-main);
+            font-weight: 500;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .commit-file {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Modal Overlay Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-modal {
+            border: none;
+            padding: 0.55rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-modal.primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-modal.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-modal.secondary {
+            background: #e5e7eb;
+            color: var(--text-main);
+        }
+
+        .btn-modal.secondary:hover {
+            background: #d1d5db;
+        }
+
+        /* Fullscreen Password Login Screen */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #f3f4f6;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SECURE PASSWORD LOCK OVERLAY -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-card">
+            <div>
+                <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--accent);">Creatix Admin Panel</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Enter password to access the workspace</p>
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label for="loginPassword" style="font-weight: 600; margin-bottom: 0.3rem;">Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" style="padding: 0.7rem;" value="admin123">
+            </div>
+            <button id="btnLoginSubmit" class="btn-connect" style="padding: 0.75rem; font-size: 0.95rem;">Unlock Workspace</button>
+            <div id="loginError" style="color: var(--error); font-size: 0.8rem; display: none;">Invalid credentials. Please try again.</div>
+        </div>
+    </div>
+
+    <!-- IDE Interface -->
+    <div class="ide-container">
+        
+        <!-- Activity Bar -->
+        <div class="activity-bar">
+            <!-- Explorer Tab Toggle -->
+            <div class="activity-btn active" id="btn-explorer-tab" title="Explorer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <!-- Source Control Tab Toggle -->
+            <div class="activity-btn" id="btn-git-tab" title="Commit Log">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path><circle cx="12" cy="2" r="2"></circle><circle cx="12" cy="22" r="2"></circle></svg>
+            </div>
+            <!-- Settings Tab Toggle -->
+            <div class="activity-btn" id="btn-settings-tab" title="Settings">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel">
+            
+            <!-- PANEL: EXPLORER VIEW -->
+            <div id="panel-explorer" class="side-panel-content">
+                <div class="side-panel-header">
+                    <span class="side-panel-title">Workspace Files</span>
+                    <button id="btnNewFile" title="New File" style="display: none;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                </div>
+                
+                <div class="explorer-section">
+                    <div class="explorer-section-title">
+                        <span>Workspace Files</span>
+                    </div>
+                    <ul class="file-list" id="workspaceFileList">
+                        <!-- Loaded dynamically -->
+                        <li class="file-item active">
+                            <span style="color: #e34c26;">⚡</span> index.html
+                        </li>
+                    </ul>
+
+                    <div class="explorer-section-title" style="margin-top: 2rem;">
+                        <span>Upload Assets</span>
+                    </div>
+                    
+                    <!-- File upload Drag and Drop box -->
+                    <div class="upload-zone" id="uploadZone">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.5-2-2-3.5-4-3.9h-1.5c-1.2-3.5-4-6-7.8-5.3-3 .5-5.4 2.5-6.1 5.4-1.7 1.1-2.5 3-2 5 .5 1.7 1.9 2.8 3.6 2.8h17.1z"></path><path d="M12 12v6"></path><path d="M9 15l3-3 3 3"></path></svg>
+                        <span>Drop Image/Video or Click to Browse</span>
+                        <input type="file" id="hiddenFileInput" accept="image/*,video/*">
+                    </div>
+
+                    <!-- Upload spinner indicator -->
+                    <div class="upload-loading" id="uploadLoading">
+                        <div class="spinner"></div>
+                        <span>Uploading Asset...</span>
+                    </div>
+
+                    <!-- Assets List Explorer -->
+                    <div class="explorer-section-title">
+                        <span>Asset Library</span>
+                    </div>
+                    <div class="assets-list" id="assetsList">
+                        <!-- Loaded dynamically -->
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 1rem 0;">No assets uploaded yet.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL: COMMIT LOG (GIT) VIEW -->
+            <div id="panel-git" class="side-panel-content" style="display: none;">
+                <div class="side-panel-header">
+                    <span class="side-panel-title">Commit Log</span>
+                </div>
+                <div style="padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem;" id="commitHistoryList">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 2rem 0;">No commits logged yet.</div>
+                </div>
+            </div>
+
+            <!-- PANEL: SETTINGS VIEW -->
+            <div id="panel-settings" class="side-panel-content" style="display: none;">
+                <div class="side-panel-header">
+                    <span class="side-panel-title">Cloud Configuration</span>
+                </div>
+                <div class="settings-section">
+                    <!-- Hidden Sync API configuration to preserve JS references -->
+                    <div style="display: none;">
+                        <div class="form-group">
+                            <label for="settingsApiUrl">Sync API Endpoint</label>
+                            <input type="text" id="settingsApiUrl" placeholder="https://script.google.com/macros/s/.../exec">
+                        </div>
+                        <button type="button" class="btn-connect" id="btnConnectApi">Connect Workspace</button>
+                    </div>
+
+                    <!-- Suggestions Section -->
+                    <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.15); border-radius: 8px; padding: 1rem;">
+                        <h4 style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.3rem;">
+                            💡 suggestions
+                        </h4>
+                        <p style="font-size: 0.8rem; color: var(--text-main); line-height: 1.4; font-weight: 500;">
+                            Please write SPA code and don't destroy any existing logic from Tanush Dev.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Code Editor Area -->
+        <div class="editor-pane">
+            <!-- Tabs Header bar -->
+            <div class="tab-bar">
+                <div class="tab active">
+                    <span id="activeFileIcon" style="color: #e34c26;">⚡</span>
+                    <span id="activeFileName">index.html</span>
+                </div>
+                
+                <div class="tab-actions">
+                    <button class="publish-btn" id="btnPublishCode" disabled>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        <span>Publish Changes</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor Frame -->
+            <div class="editor-frame">
+                <div id="editor-container"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-left">
+            <span id="connStatus" style="display: flex; align-items: center; gap: 0.4rem;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--error); display: inline-block;"></span>
+                Disconnected from CMS
+            </span>
+        </div>
+        <div class="status-right">
+            <a href="index.html" target="_blank" class="status-link">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                View Website
+            </a>
+            <span id="cursorPos">Ln 1, Col 1</span>
+            <span>UTF-8</span>
+            <span id="editorLanguageMode">HTML</span>
+        </div>
+    </div>
+
+    <!-- PUBLISH / COMMIT MODAL -->
+    <div id="commitModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 class="modal-title">Publish & Commit Changes</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-group">
+                    <label for="commitAuthor">Author Name</label>
+                    <input type="text" id="commitAuthor" placeholder="Enter your name" style="height: 36px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 6px;">
+                </div>
+                <div class="form-group">
+                    <label for="commitMsgInput">Commit Message</label>
+                    <input type="text" id="commitMsgInput" placeholder="What changes did you make?" style="height: 36px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 6px;">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="btnCancelCommit" class="btn-modal secondary">Cancel</button>
+                <button id="btnConfirmCommit" class="btn-modal primary">Confirm Publish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Alerts -->
+    <div class="toast-wrapper" id="toastContainer"></div>
+
+    <!-- Load Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script>
+        // Global workspace variables
+        let editor = null;
+        let activeFile = 'index.html';
+        let files = { 'index.html': '<!-- Connect to your API endpoint in settings to load workspace files -->' };
+        let assets = [];
+        let commitHistory = [];
+        let userPassword = '';
+
+        // Pre-configured default Web App URL
+        const defaultUrl = 'https://script.google.com/macros/s/AKfycbwuRwsYbZe3htVUv_2xh-R04_KxjSFp-1QJ8BZMXjom0_eAzSuevAm-jl_205dcLpJ0/exec';
+
+        // DOM elements
+        const btnExplorerTab = document.getElementById('btn-explorer-tab');
+        const btnGitTab = document.getElementById('btn-git-tab');
+        const btnSettingsTab = document.getElementById('btn-settings-tab');
+        const panelExplorer = document.getElementById('panel-explorer');
+        const panelGit = document.getElementById('panel-git');
+        const panelSettings = document.getElementById('panel-settings');
+        
+        const settingsApiUrl = document.getElementById('settingsApiUrl');
+        const btnConnectApi = document.getElementById('btnConnectApi');
+        const connStatus = document.getElementById('connStatus');
+        const cursorPos = document.getElementById('cursorPos');
+        const btnPublishCode = document.getElementById('btnPublishCode');
+        const uploadZone = document.getElementById('uploadZone');
+        const hiddenFileInput = document.getElementById('hiddenFileInput');
+        const uploadLoading = document.getElementById('uploadLoading');
+        const assetsList = document.getElementById('assetsList');
+        const workspaceFileList = document.getElementById('workspaceFileList');
+        const commitHistoryList = document.getElementById('commitHistoryList');
+        const toastContainer = document.getElementById('toastContainer');
+        const btnNewFile = document.getElementById('btnNewFile');
+
+        // Modal DOM elements
+        const commitModal = document.getElementById('commitModal');
+        const commitAuthor = document.getElementById('commitAuthor');
+        const commitMsgInput = document.getElementById('commitMsgInput');
+        const btnCancelCommit = document.getElementById('btnCancelCommit');
+        const btnConfirmCommit = document.getElementById('btnConfirmCommit');
+
+        // Login DOM elements
+        const loginOverlay = document.getElementById('loginOverlay');
+        const loginPasswordInput = document.getElementById('loginPassword');
+        const btnLoginSubmit = document.getElementById('btnLoginSubmit');
+        const loginError = document.getElementById('loginError');
+
+        // Initial setup for Monaco Editor
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            editor = monaco.editor.create(document.getElementById('editor-container'), {
+                value: files[activeFile],
+                language: 'html',
+                theme: 'vs',
+                automaticLayout: true,
+                fontSize: 14,
+                fontFamily: "Consolas, 'Courier New', monospace",
+                minimap: { enabled: true },
+                scrollbar: {
+                    vertical: 'visible',
+                    horizontal: 'visible'
+                }
+            });
+
+            // Update line number / cursor column position on cursor change
+            editor.onDidChangeCursorPosition((e) => {
+                cursorPos.textContent = `Ln ${e.position.lineNumber}, Col ${e.position.column}`;
+            });
+
+            // Ctrl + S Event Listener
+            editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function() {
+                if (!btnPublishCode.disabled) {
+                    openPublishModal();
+                }
+            });
+
+            // Load credentials or check session
+            checkSessionAuth();
+        });
+
+        // Check password auth
+        function checkSessionAuth() {
+            const cachedPwd = sessionStorage.getItem('admin_pwd');
+            if (cachedPwd) {
+                userPassword = cachedPwd;
+                loginOverlay.style.display = 'none';
+                initializeIDE();
+            } else {
+                loginOverlay.style.display = 'flex';
+            }
+        }
+
+        // Login submit handler
+        btnLoginSubmit.addEventListener('click', async () => {
+            const pwd = loginPasswordInput.value.trim();
+            if (!pwd) return;
+
+            btnLoginSubmit.disabled = true;
+            btnLoginSubmit.textContent = 'Verifying...';
+            loginError.style.display = 'none';
+
+            const url = localStorage.getItem('google_sheets_api_url') || defaultUrl;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'verify_password',
+                        pwd: pwd
+                    })
+                });
+
+                if (!response.ok) throw new Error("HTTP connection failed");
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    userPassword = pwd;
+                    sessionStorage.setItem('admin_pwd', pwd);
+                    loginOverlay.style.display = 'none';
+                    initializeIDE();
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (err) {
+                console.error(err);
+                loginError.textContent = "Credentials verification failed. Please verify API Endpoint or password.";
+                loginError.style.display = 'block';
+            } finally {
+                btnLoginSubmit.disabled = false;
+                btnLoginSubmit.textContent = 'Unlock Workspace';
+            }
+        });
+
+        // Initialize state from local Cache
+        function initializeIDE() {
+            let cachedUrl = localStorage.getItem('google_sheets_api_url');
+            if (!cachedUrl || !cachedUrl.includes('/exec') || cachedUrl.length < 50) {
+                cachedUrl = defaultUrl;
+            }
+            settingsApiUrl.value = cachedUrl;
+            localStorage.setItem('google_sheets_api_url', cachedUrl);
+            connectToSheetAPI(cachedUrl);
+        }
+
+        // Tab Switching in Left Sidebar
+        btnExplorerTab.addEventListener('click', () => {
+            switchSidePanel('explorer');
+        });
+
+        btnGitTab.addEventListener('click', () => {
+            switchSidePanel('git');
+        });
+
+        btnSettingsTab.addEventListener('click', () => {
+            switchSidePanel('settings');
+        });
+
+        function switchSidePanel(tab) {
+            btnExplorerTab.classList.remove('active');
+            btnGitTab.classList.remove('active');
+            btnSettingsTab.classList.remove('active');
+            
+            panelExplorer.style.display = 'none';
+            panelGit.style.display = 'none';
+            panelSettings.style.display = 'none';
+
+            if (tab === 'explorer') {
+                btnExplorerTab.classList.add('active');
+                panelExplorer.style.display = 'block';
+            } else if (tab === 'git') {
+                btnGitTab.classList.add('active');
+                panelGit.style.display = 'block';
+            } else if (tab === 'settings') {
+                btnSettingsTab.classList.add('active');
+                panelSettings.style.display = 'block';
+            }
+        }
+
+        // Settings API connection click
+        btnConnectApi.addEventListener('click', () => {
+            const url = settingsApiUrl.value.trim();
+            if (!url) {
+                localStorage.removeItem('google_sheets_api_url');
+                connStatus.innerHTML = `<span style="width: 8px; height: 8px; border-radius: 50%; background: var(--error); display: inline-block;"></span> Disconnected`;
+                btnPublishCode.disabled = true;
+                showToast("Workspace disconnected", "info");
+                return;
+            }
+
+            if (!url.startsWith('https://script.google.com/')) {
+                showToast("Please enter a valid Web App URL", "error");
+                return;
+            }
+
+            localStorage.setItem('google_sheets_api_url', url);
+            connectToSheetAPI(url);
+        });
+
+        // API Content Synchronization
+        async function connectToSheetAPI(url) {
+            btnConnectApi.disabled = true;
+            btnConnectApi.textContent = 'Connecting...';
+            connStatus.innerHTML = `<span class="spinner" style="border-top-color: white; width: 10px; height: 10px;"></span> Syncing...`;
+            
+            try {
+                const res = await fetch(url + "?pwd=" + encodeURIComponent(userPassword));
+                if (!res.ok) throw new Error("Connection failed");
+                const result = await res.json();
+                
+                if (result.status === "success" && result.data) {
+                    files = result.data.files || { 'index.html': '' };
+                    assets = result.data.assets || [];
+                    commitHistory = result.data.commit_history || [];
+
+                    renderFileList();
+                    renderAssets();
+                    renderCommitHistory();
+
+                    // Switch to active file or load active file
+                    if (files[activeFile] !== undefined) {
+                        editor.setValue(files[activeFile]);
+                    } else {
+                        activeFile = Object.keys(files)[0] || 'index.html';
+                        editor.setValue(files[activeFile] || '');
+                    }
+                    updateActiveFileTab();
+
+                    connStatus.innerHTML = `<span style="width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block;"></span> Cloud Connected`;
+                    btnPublishCode.disabled = false;
+                    showToast("Workspace loaded successfully!", "success");
+                } else {
+                    throw new Error(result.message || "Invalid response structure");
+                }
+            } catch (err) {
+                console.error(err);
+                connStatus.innerHTML = `<span style="width: 8px; height: 8px; border-radius: 50%; background: var(--error); display: inline-block;"></span> Connection Failed`;
+                btnPublishCode.disabled = true;
+                showToast("Workspace connection failed! Confirm your endpoint URL and credentials.", "error");
+            } finally {
+                btnConnectApi.disabled = false;
+                btnConnectApi.textContent = 'Connect Workspace';
+            }
+        }
+
+        // Render Sidebar File List
+        function renderFileList() {
+            workspaceFileList.innerHTML = Object.keys(files).map(filename => {
+                let icon = '📄';
+                if (filename.endsWith('.html')) icon = '<span style="color: #e34c26;">⚡</span>';
+                else if (filename.endsWith('.css')) icon = '<span style="color: #0284c7;">🎨</span>';
+                else if (filename.endsWith('.js')) icon = '<span style="color: #eab308;">⚙️</span>';
+
+                const isActive = filename === activeFile;
+                const isRoot = filename === 'index.html';
+
+                return `
+                    <li class="file-item ${isActive ? 'active' : ''}" onclick="switchFile('${filename}')">
+                        <span>${icon}</span>
+                        <span style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${filename}</span>
+                        ${!isRoot ? `
+                        <span onclick="event.stopPropagation(); deleteWorkspaceFile('${filename}')" style="cursor: pointer; opacity: 0.6; display: flex; align-items: center;" title="Delete File">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </span>
+                        ` : ''}
+                    </li>
+                `;
+            }).join('');
+        }
+
+        // Switch active file in workspace editor
+        function switchFile(filename) {
+            if (filename === activeFile) return;
+            
+            // Save unsaved code in local memory object
+            files[activeFile] = editor.getValue();
+            
+            activeFile = filename;
+            editor.setValue(files[activeFile] || '');
+            
+            // Set Monaco Mode dynamically
+            let mode = 'html';
+            if (filename.endsWith('.css')) mode = 'css';
+            else if (filename.endsWith('.js')) mode = 'javascript';
+            
+            monaco.editor.setModelLanguage(editor.getModel(), mode);
+            document.getElementById('editorLanguageMode').textContent = mode.toUpperCase();
+
+            updateActiveFileTab();
+            renderFileList();
+        }
+
+        function updateActiveFileTab() {
+            document.getElementById('activeFileName').textContent = activeFile;
+            let icon = '📄';
+            if (activeFile.endsWith('.html')) icon = '⚡';
+            else if (activeFile.endsWith('.css')) icon = '🎨';
+            else if (activeFile.endsWith('.js')) icon = '⚙️';
+            
+            const activeFileIconEl = document.getElementById('activeFileIcon');
+            activeFileIconEl.textContent = icon;
+            if (activeFile.endsWith('.html')) activeFileIconEl.style.color = '#e34c26';
+            else if (activeFile.endsWith('.css')) activeFileIconEl.style.color = '#0284c7';
+            else if (activeFile.endsWith('.js')) activeFileIconEl.style.color = '#eab308';
+            else activeFileIconEl.style.color = 'var(--text-muted)';
+        }
+
+        // Create new file
+        btnNewFile.addEventListener('click', async () => {
+            const url = localStorage.getItem('google_sheets_api_url');
+            if (!url) {
+                showToast("Workspace not connected.", "error");
+                return;
+            }
+
+            const filename = prompt("Enter new filename (e.g. style.css, contact.html, app.js):");
+            if (!filename) return;
+
+            const cleanName = filename.trim();
+            if (!/^[a-zA-Z0-9_\-\.]+\.(html|css|js)$/.test(cleanName)) {
+                showToast("Invalid filename. Must end in .html, .css, or .js and contain only alphanumeric characters.", "error");
+                return;
+            }
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'create_file',
+                        filename: cleanName,
+                        pwd: userPassword
+                    })
+                });
+
+                if (!response.ok) throw new Error("HTTP request failed");
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    showToast(`File ${cleanName} created!`, "success");
+                    connectToSheetAPI(url); // reload files list
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (err) {
+                showToast("Failed to create file: " + err.message, "error");
+            }
+        });
+
+        // Delete custom workspace file
+        async function deleteWorkspaceFile(filename) {
+            const url = localStorage.getItem('google_sheets_api_url');
+            if (!url) return;
+
+            if (!confirm(`Are you sure you want to delete ${filename}? This cannot be undone.`)) return;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'delete_file',
+                        filename: filename,
+                        pwd: userPassword
+                    })
+                });
+
+                if (!response.ok) throw new Error("HTTP request failed");
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    showToast(`File ${filename} deleted successfully.`, "success");
+                    if (activeFile === filename) {
+                        activeFile = 'index.html';
+                    }
+                    connectToSheetAPI(url);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (err) {
+                showToast("Could not delete file: " + err.message, "error");
+            }
+        }
+
+        // --- COMMIT AND PUBLISH WORKFLOW ---
+        btnPublishCode.addEventListener('click', openPublishModal);
+
+        function openPublishModal() {
+            // Pre-fill last author name
+            commitAuthor.value = localStorage.getItem('commit_author') || '';
+            commitMsgInput.value = '';
+            commitModal.style.display = 'flex';
+        }
+
+        btnCancelCommit.addEventListener('click', () => {
+            commitModal.style.display = 'none';
+        });
+
+        btnConfirmCommit.addEventListener('click', () => {
+            const author = commitAuthor.value.trim();
+            const message = commitMsgInput.value.trim();
+
+            if (!author) {
+                showToast("Please enter an author name to log this commit.", "error");
+                return;
+            }
+
+            commitModal.style.display = 'none';
+            saveCodeToSheets(author, message || `Updated ${activeFile}`);
+        });
+
+        async function saveCodeToSheets(author, commitMsg) {
+            const url = localStorage.getItem('google_sheets_api_url');
+            if (!url) {
+                showToast("No connected API endpoint.", "error");
+                return;
+            }
+
+            btnPublishCode.disabled = true;
+            const originalText = btnPublishCode.innerHTML;
+            btnPublishCode.innerHTML = `<span class="spinner" style="border-top-color: white; width: 10px; height: 10px;"></span> Saving...`;
+            
+            const code = editor.getValue();
+            localStorage.setItem('commit_author', author);
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'save_code',
+                        file: activeFile,
+                        code: code,
+                        author: author,
+                        message: commitMsg,
+                        pwd: userPassword
+                    })
+                });
+
+                if (!response.ok) throw new Error("HTTP Post failed");
+                const result = await response.json();
+                
+                if (result.status === "success") {
+                    showToast("Changes successfully published and committed!", "success");
+                    if (result.commit_history) {
+                        commitHistory = result.commit_history;
+                        renderCommitHistory();
+                    } else {
+                        connectToSheetAPI(url); // Fallback full sync
+                    }
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Failed to publish code updates: " + err.message, "error");
+            } finally {
+                btnPublishCode.disabled = false;
+                btnPublishCode.innerHTML = originalText;
+            }
+        }
+
+        // Render Commit Logs List
+        function renderCommitHistory() {
+            if (commitHistory.length === 0) {
+                commitHistoryList.innerHTML = `<div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 2rem 0;">No commits logged yet.</div>`;
+                return;
+            }
+
+            commitHistoryList.innerHTML = commitHistory.map(commit => {
+                let timeStr = 'Just now';
+                try {
+                    const date = new Date(commit.timestamp);
+                    timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' ' + date.toLocaleDateString();
+                } catch(e) {}
+
+                return `
+                    <div class="commit-card">
+                        <div class="commit-header">
+                            <span class="commit-author">@${commit.author}</span>
+                            <span class="commit-time">${timeStr}</span>
+                        </div>
+                        <div class="commit-msg">${commit.message}</div>
+                        <div class="commit-file">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                            <span>${commit.file}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- ASSET UPLOAD LOGIC ---
+        
+        // Open file selector on clicking upload zone
+        uploadZone.addEventListener('click', () => {
+            hiddenFileInput.click();
+        });
+
+        // Drag and Drop implementation
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = 'var(--accent)';
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.style.borderColor = 'rgba(0, 0, 0, 0.12)';
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = 'rgba(0, 0, 0, 0.12)';
+            const file = e.dataTransfer.files[0];
+            if (file) handleFileSelected(file);
+        });
+
+        hiddenFileInput.addEventListener('change', () => {
+            const file = hiddenFileInput.files[0];
+            if (file) handleFileSelected(file);
+        });
+
+        // Convert file to Base64 and send to workspace backend
+        function handleFileSelected(file) {
+            const url = localStorage.getItem('google_sheets_api_url');
+            if (!url) {
+                showToast("Connect your workspace before uploading files.", "error");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            
+            reader.onload = async function() {
+                const dataUrl = reader.result;
+                const base64Data = dataUrl.split(',')[1];
+                
+                uploadLoading.style.display = 'flex';
+                
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({
+                            action: 'upload_asset',
+                            fileName: file.name,
+                            mimeType: file.type,
+                            base64Data: base64Data,
+                            pwd: userPassword
+                        })
+                    });
+
+                    if (!response.ok) throw new Error("Upload request failed");
+                    const result = await response.json();
+                    
+                    if (result.status === "success") {
+                        assets.push(result.asset);
+                        renderAssets();
+                        showToast(`Uploaded ${file.name} successfully!`, "success");
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (error) {
+                    console.error(error);
+                    showToast("Failed to upload file: " + error.message, "error");
+                } finally {
+                    uploadLoading.style.display = 'none';
+                    hiddenFileInput.value = '';
+                }
+            };
+        }
+
+        // Render uploaded Assets explorer UI
+        function renderAssets() {
+            if (assets.length === 0) {
+                assetsList.innerHTML = `<div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 1rem 0;">No assets uploaded yet.</div>`;
+                return;
+            }
+
+            assetsList.innerHTML = assets.map(asset => {
+                let thumbnail = '📄';
+                if (asset.mimeType.startsWith('image/')) {
+                    thumbnail = `<img src="${asset.url}" class="asset-thumb" alt="thumb">`;
+                } else if (asset.mimeType.startsWith('video/')) {
+                    thumbnail = '🎥';
+                }
+                
+                const sizeKB = (asset.size / 1024).toFixed(1);
+                const isVideo = asset.mimeType.startsWith('video/');
+                
+                return `
+                    <div class="asset-card">
+                        <div class="asset-thumb">${thumbnail}</div>
+                        <div class="asset-info" style="flex: 1; min-width: 0;">
+                            <div class="asset-name" title="${asset.name}" style="font-weight: 600;">${asset.name}</div>
+                            <a href="${asset.url}" target="_blank" style="color: var(--accent); font-size: 0.75rem; text-decoration: underline; word-break: break-all; display: block; margin: 0.2rem 0;">Link to file</a>
+                            <div class="asset-size">${sizeKB} KB</div>
+                            <span onclick="copyImgTag('${asset.url}', ${isVideo})" style="cursor: pointer; font-size: 0.75rem; color: #10b981; font-weight: 600; display: inline-flex; align-items: center; gap: 0.2rem; margin-top: 0.3rem;" title="Copy HTML tag to insert this file">
+                                📋 Copy as ${isVideo ? 'Video' : 'Image'} Tag
+                            </span>
+                        </div>
+                        <div class="asset-actions">
+                            <button class="asset-btn" title="Copy Direct URL" onclick="copyAssetUrl('${asset.url}')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                            </button>
+                            <button class="asset-btn delete" title="Delete Asset" onclick="deleteAsset('${asset.id}')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Copy Asset Direct Download URL helper
+        function copyAssetUrl(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                showToast("Direct download link copied to clipboard!", "success");
+            }).catch(() => {
+                showToast("Failed to copy link.", "error");
+            });
+        }
+
+        // Copy tag helper
+        function copyImgTag(url, isVideo) {
+            const tag = isVideo ? `<video src="${url}" controls style="max-width: 100%;"></video>` : `<img src="${url}" alt="Image" style="max-width: 100%;">`;
+            const typeLabel = isVideo ? "Video" : "Image";
+            navigator.clipboard.writeText(tag).then(() => {
+                showToast(`HTML ${typeLabel} tag copied to clipboard!`, "success");
+            }).catch(() => {
+                showToast("Failed to copy tag.", "error");
+            });
+        }
+
+        // Delete asset in workspace and database
+        async function deleteAsset(fileId) {
+            const url = localStorage.getItem('google_sheets_api_url');
+            if (!url) return;
+
+            if (!confirm("Are you sure you want to delete this asset?")) return;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'delete_asset',
+                        fileId: fileId,
+                        pwd: userPassword
+                    })
+                });
+
+                if (!response.ok) throw new Error("Delete failed");
+                const result = await response.json();
+                
+                if (result.status === "success") {
+                    assets = assets.filter(asset => asset.id !== fileId);
+                    renderAssets();
+                    showToast("Asset deleted successfully.", "success");
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Could not delete asset: " + error.message, "error");
+            }
+        }
+
+        // Toast alert builder
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = 'ℹ️';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+
+            toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 50);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
