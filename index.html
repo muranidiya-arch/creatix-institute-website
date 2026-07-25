@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creatix institute</title>
+    <title>Creatix Institute</title>
     <meta name="description" content="Aetheria Studio designs and builds bespoke, high-performance web experiences with stunning visuals and micro-interactions.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -667,56 +667,65 @@
             overflow: hidden;
         }
 
-        .loading-emoji-container {
+        .loader-ring-container {
             position: relative;
+            width: 80px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .loading-emoji-glow {
+        .loader-ring-glow {
             position: absolute;
             width: 100px;
             height: 100px;
-            background: var(--gradient-1);
-            filter: blur(25px);
-            opacity: 0.15;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0) 70%);
+            filter: blur(15px);
             border-radius: 50%;
-            animation: pulse-glow 2s infinite alternate;
+            animation: ring-glow-pulse 2s infinite ease-in-out;
         }
 
-        .loading-emoji {
-            font-size: 3.5rem;
-            animation: emoji-spin-pulse 2.2s infinite cubic-bezier(0.68, -0.6, 0.32, 1.6);
+        .loader-ring {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            border-top: 3px solid var(--accent, #4f46e5);
+            border-right: 3px solid var(--accent, #7c3aed);
+            animation: ring-spin 1s infinite linear;
             position: relative;
             z-index: 2;
         }
 
         .loading-text {
-            font-size: 0.95rem;
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
             color: var(--text-secondary);
             font-weight: 600;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            font-family: var(--font-heading);
-            animation: text-pulse 2s infinite ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-left: 0.25em;
+            animation: text-fade 1.8s infinite ease-in-out;
         }
 
-        @keyframes emoji-spin-pulse {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.25) rotate(180deg); }
-            100% { transform: scale(1) rotate(360deg); }
+        @keyframes ring-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        @keyframes pulse-glow {
-            0% { transform: scale(0.8); opacity: 0.1; }
-            100% { transform: scale(1.3); opacity: 0.25; }
+        @keyframes ring-glow-pulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.9); }
+            50% { opacity: 0.6; transform: scale(1.1); }
         }
 
-        @keyframes text-pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+        @keyframes text-fade {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.95; }
         }
     </style>
 </head>
@@ -959,11 +968,11 @@
 
     <!-- Loading Screen Overlay shown during initial synchronization -->
     <div id="sync-loading-overlay">
-        <div class="loading-emoji-container">
-            <div class="loading-emoji-glow"></div>
-            <div class="loading-emoji">⏳</div>
+        <div class="loader-ring-container">
+            <div class="loader-ring-glow"></div>
+            <div class="loader-ring"></div>
         </div>
-        <div class="loading-text">Synchronizing...</div>
+        <div class="loading-text">Synchronizing</div>
     </div>
 
     <!-- Glowing Background blobs -->
